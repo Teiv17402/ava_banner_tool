@@ -6,7 +6,7 @@
 <title>AVA — AI VIDEO AFFILIATE | Banner Generator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&family=Raleway:wght@300;400;500;600;700;800&family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&family=Raleway:wght@300;400;500;600;700;800&family=Great+Vibes&family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
@@ -205,33 +205,41 @@
   .tpl-wel-4 .role { color:rgba(255,255,255,.7); margin-bottom:8px; }
   .tpl-wel-4 .dept { color:var(--accent); font-family:'Oswald',sans-serif; letter-spacing:.2em; text-transform:uppercase; }
 
-  /* EVENT */
-  .tpl-event-1 { background:linear-gradient(180deg,var(--primary) 0%,var(--dark) 100%); color:#fff; padding:50px; justify-content:center; align-items:center; text-align:center; }
-  .tpl-event-1 .label { color:var(--accent); letter-spacing:.4em; text-transform:uppercase; font-size:.5em; margin-bottom:18px; }
-  .tpl-event-1 .title { font-weight:800; line-height:1.05; margin-bottom:24px; }
-  .tpl-event-1 .meta { padding:14px 24px; border:2px solid var(--accent); border-radius:8px; color:var(--accent); font-family:'Oswald',sans-serif; letter-spacing:.1em; display:inline-block; }
-  .tpl-event-2 { background:#fff; color:var(--dark); padding:0; }
-  .tpl-event-2 .header { background:var(--primary); color:#fff; padding:30px 50px; }
-  .tpl-event-2 .header .label { color:var(--accent); font-family:'Oswald',sans-serif; letter-spacing:.3em; text-transform:uppercase; font-size:.45em; margin-bottom:8px; }
-  .tpl-event-2 .header .title { font-weight:800; line-height:1.05; }
-  .tpl-event-2 .body { padding:40px 50px; display:grid; grid-template-columns:1fr 1fr; gap:30px; flex:1; align-items:center; }
-  .tpl-event-2 .body .info-block { display:flex; flex-direction:column; gap:10px; }
-  .tpl-event-2 .body .info-block .lbl { font-size:.4em; color:var(--gray); font-family:'Oswald',sans-serif; letter-spacing:.25em; text-transform:uppercase; }
-  .tpl-event-2 .body .info-block .val { color:var(--primary); font-weight:700; font-family:'Oswald',sans-serif; }
-  .tpl-event-3 { background:var(--dark); color:#fff; padding:50px; justify-content:flex-end; position:relative; }
-  .tpl-event-3::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 80% 20%,var(--primary) 0%,transparent 60%),radial-gradient(circle at 20% 80%,var(--accent) 0%,transparent 60%); opacity:.4; }
-  .tpl-event-3 .content { position:relative; z-index:2; }
-  .tpl-event-3 .label { color:var(--accent); letter-spacing:.3em; text-transform:uppercase; font-size:.45em; margin-bottom:10px; }
-  .tpl-event-3 .title { font-weight:800; line-height:1.05; margin-bottom:18px; }
-  .tpl-event-3 .meta { color:rgba(255,255,255,.85); font-family:'Oswald',sans-serif; letter-spacing:.05em; }
-  .tpl-event-4 { background:#fff; padding:0; color:var(--dark); display:grid; grid-template-columns:1fr 2fr; }
-  .tpl-event-4 .date-side { background:var(--accent); color:var(--dark); padding:50px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-  .tpl-event-4 .date-side .day { font-weight:800; font-size:1.4em; line-height:1; }
-  .tpl-event-4 .date-side .month { font-family:'Oswald',sans-serif; letter-spacing:.3em; text-transform:uppercase; margin-top:6px; }
-  .tpl-event-4 .info { padding:50px; display:flex; flex-direction:column; justify-content:center; }
-  .tpl-event-4 .info .label { color:var(--primary); font-family:'Oswald',sans-serif; letter-spacing:.3em; text-transform:uppercase; font-size:.45em; margin-bottom:12px; }
-  .tpl-event-4 .info .title { color:var(--dark); font-weight:800; line-height:1.05; margin-bottom:18px; }
-  .tpl-event-4 .info .meta { color:var(--gray); }
+  /* EVENT — Master design DNA (dựa trên template 30/4-1/5) */
+  .tpl-evt-base { color:#fff; position:relative; overflow:hidden; background:linear-gradient(135deg,var(--dark) 0%,var(--primary) 60%,var(--primary) 100%); }
+  .tpl-evt-base::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 75% 35%,rgba(255,255,255,.18) 0%,transparent 45%),radial-gradient(circle at 20% 80%,rgba(0,0,0,.3) 0%,transparent 50%); }
+  .tpl-evt-base::after { content:""; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(110deg,transparent 0,transparent 100px,rgba(255,255,255,.04) 100px,rgba(255,255,255,.04) 102px); }
+  .tpl-evt-base .evt-content { position:relative; z-index:2; width:100%; height:100%; display:flex; }
+  .tpl-evt-base .cta-script { font-family:'Great Vibes','Allura',cursive; color:var(--accent); font-weight:400; line-height:1; text-shadow:0 3px 12px rgba(0,0,0,.5); }
+  .tpl-evt-base .title-main { font-family:'Montserrat','Inter',sans-serif; font-weight:800; text-transform:uppercase; color:#fff; letter-spacing:.01em; line-height:1.1; text-shadow:0 4px 14px rgba(0,0,0,.4); }
+  .tpl-evt-base .subtitle-thin { font-family:'Oswald',sans-serif; font-weight:300; text-transform:uppercase; letter-spacing:.18em; color:rgba(255,255,255,.95); }
+  .tpl-evt-base .date-pill { display:inline-block; padding:14px 32px; background:linear-gradient(135deg,rgba(0,0,0,.2) 0%,var(--accent) 30%,var(--accent) 70%,rgba(0,0,0,.2) 100%); color:#fff; font-weight:700; border-radius:10px; box-shadow:0 4px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -2px 0 rgba(0,0,0,.2); font-family:'Oswald',sans-serif; letter-spacing:.05em; border:1px solid rgba(255,255,255,.2); }
+  .tpl-evt-base .body-italic { font-style:italic; color:rgba(255,255,255,.92); font-family:'Inter','Lora',sans-serif; }
+  .tpl-evt-base .star-icon { line-height:1; filter:drop-shadow(0 0 30px var(--accent)) drop-shadow(0 6px 14px rgba(0,0,0,.4)); }
+  .tpl-evt-base .watermark { position:absolute; bottom:20px; left:24px; color:var(--accent); font-family:'Oswald',sans-serif; letter-spacing:.2em; text-transform:uppercase; opacity:.85; z-index:3; }
+
+  /* event-1: Hero star (giống master) */
+  .tpl-event-1 .evt-content { display:grid; grid-template-columns:1fr 1.6fr; align-items:center; gap:30px; padding:50px; }
+  .tpl-event-1 .left-decor { display:flex; align-items:center; justify-content:center; }
+  .tpl-event-1 .left-decor .star-icon { font-size:8em; }
+  .tpl-event-1 .right-text { display:flex; flex-direction:column; gap:14px; }
+
+  /* event-2: Stack vertical, full width title */
+  .tpl-event-2 .evt-content { flex-direction:column; align-items:center; justify-content:center; padding:50px; text-align:center; gap:14px; }
+  .tpl-event-2 .top-icon { font-size:3em; line-height:1; filter:drop-shadow(0 0 20px var(--accent)); margin-bottom:6px; }
+
+  /* event-3: Frame center, ngôi sao 4 góc */
+  .tpl-event-3 .evt-content { padding:60px; align-items:center; justify-content:center; }
+  .tpl-event-3 .frame { border:3px solid var(--accent); padding:50px 60px; max-width:90%; text-align:center; position:relative; background:rgba(0,0,0,.2); backdrop-filter:blur(6px); display:flex; flex-direction:column; gap:14px; align-items:center; box-shadow:0 0 40px rgba(0,0,0,.3); }
+  .tpl-event-3 .frame .corner-star { position:absolute; font-size:1.8em; color:var(--accent); filter:drop-shadow(0 0 8px var(--accent)); line-height:1; }
+  .tpl-event-3 .frame .corner-star.tl { top:-18px; left:-18px; }
+  .tpl-event-3 .frame .corner-star.tr { top:-18px; right:-18px; }
+  .tpl-event-3 .frame .corner-star.bl { bottom:-18px; left:-18px; }
+  .tpl-event-3 .frame .corner-star.br { bottom:-18px; right:-18px; }
+
+  /* event-4: Minimal beam, không decoration to */
+  .tpl-event-4 .evt-content { padding:60px; align-items:center; justify-content:center; flex-direction:column; text-align:center; gap:14px; }
+  .tpl-event-4::before { background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.18) 0%,transparent 60%),radial-gradient(circle at 50% 100%,rgba(0,0,0,.3) 0%,transparent 50%); }
 
   /* EVENT BG (background image overlay) */
   .tpl-bg-base { color:#fff; background-size:cover; background-position:center; position:relative; }
@@ -529,7 +537,7 @@ const DEFAULT_STATE = {
     honor:   { name:'NGUYỄN VĂN A', role:'Top 1 Affiliate Q1/2026', achievement:'Đạt doanh số 1 tỷ — vượt 250% KPI', badge:'EMPLOYEE OF THE QUARTER', photo:null },
     bday:    { name:'TRẦN THỊ B', dob:'15/05/1998', wishes:'Chúc bạn một sinh nhật thật nhiều niềm vui và thành công!', photo:null },
     welcome: { name:'LÊ VĂN C', role:'Senior Video Editor', dept:'Production Team', joinDate:today, photo:null },
-    event:   { title:'AVA Creator Summit 2026', eventType:'WORKSHOP', time:'14:00 · 28/04/2026', venue:'Hội trường tầng 5', desc:'', icon:'' },
+    event:   { title:'AVA Creator Summit 2026', eventType:'WORKSHOP', time:'14:00 · 28/04/2026', venue:'Hội trường tầng 5', desc:'', icon:'⭐', cta:'Chào mừng' },
     summary: { title:'Tổng kết Quý 1 / 2026', period:'Q1 2026', kpi1Num:'1.2 tỷ', kpi1Lbl:'Doanh thu', kpi2Num:'250+', kpi2Lbl:'Video xuất bản', kpi3Num:'95%', kpi3Lbl:'KPI đạt' }
   },
   fontTitle:'Oswald', fontBody:'Inter', titleSize:84, subSize:28, align:'center', letter:0, line:1.1, pad:60, gap:20, jpgQ:92
@@ -711,6 +719,7 @@ function renderContentForm() {
           </div>
           <div class="warn" id="f-bg-warn" style="display:none;"></div>
         </div>`;
+      html += fld('Lời chào (script gold)','f-cta',d.cta||'Chào mừng','text','Chào mừng / Mừng / Welcome to');
       html += fld('Loại sự kiện','f-eventType',d.eventType,'text','WORKSHOP / MEETING');
       html += fld('Tên sự kiện','f-title',d.title);
       html += fld('Thời gian','f-time',d.time,'text','14:00 · 28/04/2026');
@@ -736,7 +745,7 @@ function bindContentForm() {
       renderContentForm(); renderTemplateList(); render(); pushHistory();
     });
   });
-  ['course','topic','date','name','role','achievement','badge','dob','wishes','dept','joinDate','title','eventType','time','venue','desc','period','kpi1Num','kpi1Lbl','kpi2Num','kpi2Lbl','kpi3Num','kpi3Lbl'].forEach(k => {
+  ['course','topic','date','name','role','achievement','badge','dob','wishes','dept','joinDate','title','eventType','time','venue','desc','period','kpi1Num','kpi1Lbl','kpi2Num','kpi2Lbl','kpi3Num','kpi3Lbl','cta'].forEach(k => {
     const el = $('f-'+k); if (el) el.addEventListener('input', () => { d[k] = el.value; render(); pushHistory(); });
   });
   [0,1,2].forEach(i => {
@@ -750,7 +759,7 @@ function bindContentForm() {
       if (!val) { state.theme = null; render(); pushHistory(); showToast('Đã bỏ preset.'); return; }
       const p = EVENT_PRESETS.find(x => x.value === val);
       if (!p) return;
-      d.eventType = p.type; d.title = p.title; d.icon = p.icon || '';
+      d.eventType = p.type; d.title = p.title; d.icon = p.icon || '⭐'; d.cta = p.cta || 'Chào mừng';
       state.theme = { primary:p.theme.primary, accent:p.theme.accent, dark:p.theme.dark, label:p.label };
       if (p.tpl && MODULES.event.templates.find(t => t.id === p.tpl)) state.template.event = p.tpl;
       renderContentForm(); renderTemplateList(); render(); pushHistory();
@@ -945,15 +954,18 @@ function buildHTML(tplId, st, sz) {
     return `<div class="b-base tpl-wel-4" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}${ph}<div><div class="greet" data-editable contenteditable="true" ${lblStyle}>WELCOME TO THE TEAM</div><div class="name" data-editable contenteditable="true" ${tStyle}>${escapeHtml((d.name||'').toUpperCase())}</div><div class="role" data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.role||'')}</div><div class="dept" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.dept||'').toUpperCase())} · ${escapeHtml(d.joinDate||'')}</div></div></div>`;
   }
 
-  if (tplId === 'event-1') return `<div class="b-base tpl-event-1" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}${d.icon ? `<div style="font-size:${titleSize*0.7}px;margin-bottom:10px;line-height:1;">${d.icon}</div>` : ''}<div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><span data-editable contenteditable="true">${escapeHtml(d.time||'')}</span><span style="margin:0 12px;opacity:.6;">·</span><span data-editable contenteditable="true">${escapeHtml(d.venue||'')}</span></div>${d.desc?`<div data-editable contenteditable="true" ${sStyle} style="margin-top:18px;opacity:.85;max-width:80%;">${escapeHtml(d.desc)}</div>`:''}</div>`;
-  if (tplId === 'event-2') return `<div class="b-base tpl-event-2" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="header">${d.icon ? `<div style="font-size:${titleSize*0.7}px;margin-bottom:10px;line-height:1;">${d.icon}</div>` : ''}<div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div></div><div class="body"><div class="info-block"><div class="lbl" ${lblStyle}>THỜI GIAN</div><div class="val" data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.time||'')}</div></div><div class="info-block"><div class="lbl" ${lblStyle}>ĐỊA ĐIỂM</div><div class="val" data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.venue||'')}</div></div></div></div>`;
-  if (tplId === 'event-3') return `<div class="b-base tpl-event-3" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}<div class="content">${d.icon ? `<div style="font-size:${titleSize*0.7}px;margin-bottom:10px;line-height:1;">${d.icon}</div>` : ''}<div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><span data-editable contenteditable="true">${escapeHtml(d.time||'')}</span><span style="margin:0 12px;opacity:.5;">·</span><span data-editable contenteditable="true">${escapeHtml(d.venue||'')}</span></div>${d.desc?`<div data-editable contenteditable="true" ${sStyle} style="margin-top:14px;opacity:.85;max-width:90%;">${escapeHtml(d.desc)}</div>`:''}</div></div>`;
-  if (tplId === 'event-4') {
-    const mm = (d.time||'').match(/(\d{1,2})\/(\d{1,2})/);
-    const day = mm ? mm[1] : '01';
-    const month = mm ? ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mm[2])] || '—' : 'MAY';
-    return `<div class="b-base tpl-event-4" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="date-side"><div class="day" style="font-size:${titleSize*1.4}px;">${day}</div><div class="month" ${lblStyle}>${month}</div></div><div class="info">${d.icon ? `<div style="font-size:${titleSize*0.7}px;margin-bottom:10px;line-height:1;">${d.icon}</div>` : ''}<div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><div data-editable contenteditable="true">${escapeHtml(d.time||'')}</div><div data-editable contenteditable="true" style="margin-top:4px;">${escapeHtml(d.venue||'')}</div></div></div></div>`;
-  }
+  // EVENT TEMPLATES — Master design DNA (4 variants dựa trên template 30/4-1/5)
+  const evtIcon = d.icon || '⭐';
+  const cta = d.cta || 'Chào mừng';
+  const watermark = state.brand.logo ? '' : '<div class="watermark" style="font-size:' + (lblSize*0.8) + 'px;">AVA</div>';
+
+  if (tplId === 'event-1') return `<div class="b-base tpl-evt-base tpl-event-1" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="evt-content"><div class="left-decor"><span class="star-icon">${evtIcon}</span></div><div class="right-text"><div class="cta-script" data-editable contenteditable="true" style="font-size:${titleSize*0.6}px;">${escapeHtml(cta)}</div><div class="title-main" data-editable contenteditable="true" style="font-size:${titleSize*0.95}px;">${escapeHtml(d.title||'')}</div><div class="subtitle-thin" data-editable contenteditable="true" style="font-size:${subSize*0.85}px;">${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="date-pill" data-editable contenteditable="true" style="font-size:${subSize*0.95}px;">${escapeHtml(d.time||'')}${d.venue?` · ${escapeHtml(d.venue)}`:''}</div>${d.desc?`<div class="body-italic" data-editable contenteditable="true" style="font-size:${subSize*0.75}px;margin-top:6px;">${escapeHtml(d.desc)}</div>`:''}</div></div>${watermark}</div>`;
+
+  if (tplId === 'event-2') return `<div class="b-base tpl-evt-base tpl-event-2" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="evt-content"><div class="top-icon">${evtIcon}</div><div class="cta-script" data-editable contenteditable="true" style="font-size:${titleSize*0.65}px;">${escapeHtml(cta)}</div><div class="title-main" data-editable contenteditable="true" style="font-size:${titleSize*0.95}px;max-width:90%;">${escapeHtml(d.title||'')}</div><div class="subtitle-thin" data-editable contenteditable="true" style="font-size:${subSize*0.85}px;">${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="date-pill" data-editable contenteditable="true" style="font-size:${subSize*0.95}px;">${escapeHtml(d.time||'')}${d.venue?` · ${escapeHtml(d.venue)}`:''}</div>${d.desc?`<div class="body-italic" data-editable contenteditable="true" style="font-size:${subSize*0.75}px;max-width:80%;">${escapeHtml(d.desc)}</div>`:''}</div>${watermark}</div>`;
+
+  if (tplId === 'event-3') return `<div class="b-base tpl-evt-base tpl-event-3" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="evt-content"><div class="frame"><span class="corner-star tl">${evtIcon}</span><span class="corner-star tr">${evtIcon}</span><span class="corner-star bl">${evtIcon}</span><span class="corner-star br">${evtIcon}</span><div class="cta-script" data-editable contenteditable="true" style="font-size:${titleSize*0.55}px;">${escapeHtml(cta)}</div><div class="title-main" data-editable contenteditable="true" style="font-size:${titleSize*0.85}px;">${escapeHtml(d.title||'')}</div><div class="subtitle-thin" data-editable contenteditable="true" style="font-size:${subSize*0.8}px;">${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="date-pill" data-editable contenteditable="true" style="font-size:${subSize*0.9}px;">${escapeHtml(d.time||'')}${d.venue?` · ${escapeHtml(d.venue)}`:''}</div>${d.desc?`<div class="body-italic" data-editable contenteditable="true" style="font-size:${subSize*0.7}px;">${escapeHtml(d.desc)}</div>`:''}</div></div>${watermark}</div>`;
+
+  if (tplId === 'event-4') return `<div class="b-base tpl-evt-base tpl-event-4" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="evt-content"><div class="cta-script" data-editable contenteditable="true" style="font-size:${titleSize*0.7}px;">${escapeHtml(cta)}</div><div class="title-main" data-editable contenteditable="true" style="font-size:${titleSize}px;max-width:90%;">${escapeHtml(d.title||'')}</div><div class="subtitle-thin" data-editable contenteditable="true" style="font-size:${subSize*0.9}px;margin-top:4px;">${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="date-pill" data-editable contenteditable="true" style="font-size:${subSize}px;margin-top:8px;">${escapeHtml(d.time||'')}${d.venue?` · ${escapeHtml(d.venue)}`:''}</div>${d.desc?`<div class="body-italic" data-editable contenteditable="true" style="font-size:${subSize*0.75}px;max-width:75%;margin-top:10px;">${escapeHtml(d.desc)}</div>`:''}</div>${watermark}</div>`;
 
   // BACKGROUND IMAGE TEMPLATES
   const bg = (st.bgImage && st.bgImage.src && st.bgImage.useAsBg) ? st.bgImage.src : '';
