@@ -395,6 +395,7 @@
     <div class="acc closed" data-acc="utils">
       <button class="acc-hd">Tiện ích</button>
       <div class="acc-body">
+        <div class="field"><button class="btn-mini" id="btn-autofit" type="button" style="width:100%;padding:10px;font-size:12px;background:var(--primary);color:#fff;">✨ Tự căn chỉnh (Auto-fit text)</button><div style="font-size:10px;color:var(--gray);margin-top:6px;line-height:1.4;">Đo độ dài text → tự chọn cỡ chữ tối ưu để vừa khung banner. Bấm sau khi sửa text/đổi kích thước.</div></div>
         <div class="field"><label>Preset</label><div class="btn-row"><button class="btn-mini" id="btn-save-preset">Lưu preset</button><button class="btn-mini" id="btn-load-preset">Tải preset</button><button class="btn-mini" id="btn-reset">Reset</button></div></div>
         <div class="field"><label>Chất lượng JPG</label><div class="range-row"><input type="range" id="jpg-q" min="60" max="100" value="92"><span class="range-val" id="jpg-q-val">92%</span></div></div>
         <div class="field" style="font-size:11px;color:var(--gray);line-height:1.5;"><strong>Phím tắt:</strong> <code>Space</code> tạo preview · <code>Ctrl+S</code> tải PNG · <code>Ctrl+Z</code>/<code>Ctrl+Y</code> undo/redo · click vào text trên preview để chỉnh sửa trực tiếp.</div>
@@ -1086,6 +1087,41 @@ function loadPreset() {
 }
 function resetState() { state = JSON.parse(JSON.stringify(DEFAULT_STATE)); syncUI(); render(); pushHistory(); showToast('Đã reset.'); }
 
+// Auto-fit: tính cỡ chữ tối ưu dựa trên độ dài text + size canvas
+function autoFit() {
+  const m = state.module; const d = state.data[m];
+  // Lấy text title chính của từng module
+  let title = '';
+  if (m === 'event') title = d.title || '';
+  else if (m === 'train') title = d.topic || '';
+  else if (m === 'summary') title = d.title || '';
+  else title = d.name || '';
+  // Đo dòng dài nhất (split theo dấu phẩy/chấm phẩy/xuống dòng)
+  const lines = (title || '').split(/[\n,;:]/).map(s => s.trim()).filter(Boolean);
+  const longestLine = lines.reduce((acc, l) => l.length > acc ? l.length : acc, 0) || (title || '').length;
+  const sz = SIZES[state.size];
+  // Heuristic: title nên chiếm ~70% width canvas. Char width ≈ titleSize × 0.55 cho bold sans.
+  // → titleSize ≤ (sz.w × 0.7) / (longestLine × 0.55)
+  let newSize = 84;
+  if (longestLine > 0) {
+    newSize = Math.floor((sz.w * 0.65) / (longestLine * 0.55));
+    // Clamp theo giới hạn slider 40-160
+    newSize = Math.max(40, Math.min(140, newSize));
+    // Cho aspect ratio ngang dài (cover, banner) thì giảm thêm để không quá to
+    if (sz.w / sz.h > 2.5) newSize = Math.min(newSize, 90);
+    // Cho ảnh dọc (story) thì có thể to hơn 1 chút
+    if (sz.h / sz.w > 1.3) newSize = Math.min(newSize + 10, 140);
+  }
+  state.titleSize = newSize;
+  // Cũng tính subSize tương ứng (≈ 28-36% titleSize)
+  state.subSize = Math.max(14, Math.min(60, Math.round(newSize * 0.32)));
+  // Sync UI
+  $('title-size').value = state.titleSize; $('title-size-val').textContent = state.titleSize+'px';
+  $('sub-size').value = state.subSize; $('sub-size-val').textContent = state.subSize+'px';
+  render(); pushHistory();
+  showToast(`✨ Auto-fit: title ${newSize}px · sub ${state.subSize}px (text dài ${longestLine} ký tự)`);
+}
+
 function syncUI() {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.getAttribute('data-tab') === state.module));
   $('size').value = state.size;
@@ -1179,39 +1215,4 @@ function init() {
   $('font-title').addEventListener('change', () => { state.fontTitle = $('font-title').value; render(); pushHistory(); });
   $('font-body').addEventListener('change', () => { state.fontBody = $('font-body').value; render(); pushHistory(); });
   $('title-size').addEventListener('input', () => { state.titleSize = +$('title-size').value; $('title-size-val').textContent = state.titleSize+'px'; render(); pushHistory(); });
-  $('sub-size').addEventListener('input', () => { state.subSize = +$('sub-size').value; $('sub-size-val').textContent = state.subSize+'px'; render(); pushHistory(); });
-  $('letter').addEventListener('input', () => { state.letter = +$('letter').value; $('letter-val').textContent = state.letter+'px'; render(); pushHistory(); });
-  $('line').addEventListener('input', () => { state.line = +$('line').value; $('line-val').textContent = parseFloat(state.line).toFixed(2); render(); pushHistory(); });
-  document.querySelectorAll('[data-align]').forEach(b => {
-    b.addEventListener('click', () => {
-      state.align = b.getAttribute('data-align');
-      document.querySelectorAll('[data-align]').forEach(x => x.classList.toggle('on', x === b));
-      render(); pushHistory();
-    });
-  });
-  $('pad').addEventListener('input', () => { state.pad = +$('pad').value; $('pad-val').textContent = state.pad+'px'; render(); pushHistory(); });
-  $('btn-save-preset').addEventListener('click', savePreset);
-  $('btn-load-preset').addEventListener('click', loadPreset);
-  $('btn-reset').addEventListener('click', resetState);
-  $('jpg-q').addEventListener('input', () => { state.jpgQ = +$('jpg-q').value; $('jpg-q-val').textContent = state.jpgQ+'%'; });
-  $('btn-render').addEventListener('click', () => { render(); showToast('Đã làm mới preview.'); });
-  $('btn-png').addEventListener('click', () => wrapLoad(downloadPNG));
-  $('btn-jpg').addEventListener('click', () => wrapLoad(downloadJPG));
-  $('btn-copy').addEventListener('click', () => wrapLoad(copyImage));
-  $('btn-zip').addEventListener('click', () => wrapLoad(downloadZIP));
-  document.addEventListener('keydown', e => {
-    const inField = ['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName) || e.target.isContentEditable;
-    if (e.key === ' ' && !inField) { e.preventDefault(); render(); }
-    if ((e.ctrlKey||e.metaKey) && e.key === 's') { e.preventDefault(); wrapLoad(downloadPNG); }
-    if ((e.ctrlKey||e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
-    if ((e.ctrlKey||e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
-  });
-  window.addEventListener('resize', () => render());
-  syncUI(); render(); pushHistory();
-}
-
-document.addEventListener('DOMContentLoaded', init);
-</script>
-</body>
-</html>
-           
+  $('sub-size').addEventListener('input', () => { state.sub
