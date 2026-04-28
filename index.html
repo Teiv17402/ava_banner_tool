@@ -940,8 +940,18 @@ function buildHTML(tplId, st, sz) {
     const ph = d.photo ? `<div class="ph-side"><img src="${d.photo}" alt=""/></div>` : `<div class="ph-side empty"></div>`;
     return `<div class="b-base tpl-honor-2" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="top-bar" ${lblStyle} data-editable contenteditable="true">${escapeHtml((d.badge||'').toUpperCase())}</div><div class="body">${ph}<div class="info"><div class="name" data-editable contenteditable="true" ${tStyle}>${escapeHtml((d.name||'').toUpperCase())}</div><div class="role" data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.role||'')}</div><div class="ach" data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.achievement||'')}</div></div></div></div>`;
   }
-  if (tplId === 'honor-3') return `<div class="b-base tpl-honor-3" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}<div class="frame"><div class="badge" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.badge||'').toUpperCase())}</div><div class="name" data-editable contenteditable="true" ${tStyle}>${escapeHtml((d.name||'').toUpperCase())}</div><div data-editable contenteditable="true" ${sStyle} style="color:var(--accent);opacity:.95;">${escapeHtml(d.role||'')}</div><div class="ach" data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.achievement||'')}</div></div></div>`;
-  if (tplId === 'honor-4') return `<div class="b-base tpl-honor-4" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="body"><div class="left"><div class="badge-circle">★</div><div ${lblStyle} style="color:var(--dark);font-family:'Oswald',sans-serif;letter-spacing:.3em;text-transform:uppercase;font-weight:700;" data-editable contenteditable="true">${escapeHtml((d.badge||'').toUpperCase())}</div></div><div class="right"><div class="name" data-editable contenteditable="true" ${tStyle}>${escapeHtml((d.name||'').toUpperCase())}</div><div data-editable contenteditable="true" ${sStyle} style="opacity:.9;margin:6px 0 12px;">${escapeHtml(d.role||'')}</div><div data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.achievement||'')}</div></div></div></div>`;
+  if (tplId === 'honor-3') {
+    const ph3 = d.photo
+      ? `<div style="width:140px;height:140px;border-radius:50%;overflow:hidden;border:4px solid var(--accent);margin:0 auto 14px;background:var(--dark);"><img src="${d.photo}" style="width:100%;height:100%;object-fit:cover;" alt=""/></div>`
+      : '';
+    return `<div class="b-base tpl-honor-3" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}<div class="frame">${ph3}<div class="badge" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.badge||'').toUpperCase())}</div><div class="name" data-editable contenteditable="true" ${tStyle}>${escapeHtml((d.name||'').toUpperCase())}</div><div data-editable contenteditable="true" ${sStyle} style="color:var(--accent);opacity:.95;">${escapeHtml(d.role||'')}</div><div class="ach" data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.achievement||'')}</div></div></div>`;
+  }
+  if (tplId === 'honor-4') {
+    const ph4 = d.photo
+      ? `<div class="badge-circle" style="overflow:hidden;background:var(--dark);padding:0;"><img src="${d.photo}" style="width:100%;height:100%;object-fit:cover;" alt=""/></div>`
+      : `<div class="badge-circle">★</div>`;
+    return `<div class="b-base tpl-honor-4" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="body"><div class="left">${ph4}<div ${lblStyle} style="color:var(--dark);font-family:'Oswald',sans-serif;letter-spacing:.3em;text-transform:uppercase;font-weight:700;" data-editable contenteditable="true">${escapeHtml((d.badge||'').toUpperCase())}</div></div><div class="right"><div class="name" data-editable contenteditable="true" ${tStyle}>${escapeHtml((d.name||'').toUpperCase())}</div><div data-editable contenteditable="true" ${sStyle} style="opacity:.9;margin:6px 0 12px;">${escapeHtml(d.role||'')}</div><div data-editable contenteditable="true" ${sStyle}>${escapeHtml(d.achievement||'')}</div></div></div></div>`;
+  }
 
   if (tplId === 'bday-1') {
     const ph = d.photo ? `<div class="photo-circle"><img src="${d.photo}" alt=""/></div>` : `<div class="photo-circle empty"></div>`;
@@ -1204,4 +1214,4 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+           
