@@ -111,6 +111,18 @@
   .tpl-train-5 .photo.empty::after { content:"AVA"; color:rgba(255,255,255,.3); font-size:48px; font-weight:800; }
   .tpl-train-5 .info { padding:50px; display:flex; flex-direction:column; justify-content:center; background:#fff; }
   .tpl-train-5 .topic { color:var(--primary); font-weight:800; line-height:1.1; }
+  .tpl-train-6 { background:#fff; color:var(--dark); flex-direction:column; justify-content:space-between; align-items:center; text-align:center; }
+  .tpl-train-6 .top { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; }
+  .tpl-train-6 .course { color:var(--primary); font-family:'Oswald',sans-serif; letter-spacing:.3em; text-transform:uppercase; font-weight:700; }
+  .tpl-train-6 .topic { color:var(--dark); font-weight:800; line-height:1.05; }
+  .tpl-train-6 .accent-line { width:80px; height:5px; background:var(--accent); margin:6px 0; }
+  .tpl-train-6 .date { color:var(--gray); font-family:'Oswald',sans-serif; letter-spacing:.15em; }
+  .tpl-train-6 .speakers-row { display:flex; justify-content:center; align-items:flex-end; gap:80px; margin-top:auto; padding-top:30px; }
+  .tpl-train-6 .speaker { display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .tpl-train-6 .speaker .photo-circle { width:160px; height:160px; border-radius:50%; overflow:hidden; border:4px solid var(--primary); background:var(--soft); display:flex; align-items:center; justify-content:center; }
+  .tpl-train-6 .speaker .photo-circle img { width:100%; height:100%; object-fit:cover; }
+  .tpl-train-6 .speaker .photo-circle.empty::after { content:'+'; font-size:60px; color:var(--primary); opacity:.4; line-height:1; }
+  .tpl-train-6 .speaker .name { font-family:'Oswald',sans-serif; font-weight:600; color:var(--dark); }
 
   /* HONOR */
   .tpl-honor-1 { background:radial-gradient(circle at center,var(--primary) 0%,var(--dark) 100%); color:#fff; padding:50px; justify-content:center; align-items:center; text-align:center; }
@@ -443,7 +455,8 @@ const MODULES = {
     {id:'train-2',name:'Trắng minimal',swatchCss:'background:#fff;box-shadow:inset 0 0 0 3px var(--primary);'},
     {id:'train-3',name:'Gradient dark',swatchCss:'background:linear-gradient(135deg,var(--dark),var(--primary));'},
     {id:'train-4',name:'Split đen/cyan',swatchCss:'background:linear-gradient(90deg,var(--dark) 50%,var(--accent) 50%);'},
-    {id:'train-5',name:'Speaker ảnh',swatchCss:'background:linear-gradient(90deg,var(--primary) 50%,#fff 50%);'}
+    {id:'train-5',name:'Speaker ảnh',swatchCss:'background:linear-gradient(90deg,var(--primary) 50%,#fff 50%);'},
+    {id:'train-6',name:'3 speaker dưới',swatchCss:'background:#fff;box-shadow:inset 0 -50px 0 var(--soft),inset 0 0 0 3px var(--primary);'}
   ]},
   honor: { name:'Vinh danh', templates:[
     {id:'honor-1',name:'Spotlight',swatchCss:'background:radial-gradient(circle,var(--primary),var(--dark));'},
@@ -931,6 +944,15 @@ function buildHTML(tplId, st, sz) {
     const sp = (d.speakers||[]).filter(Boolean);
     const photoHTML = sp[0] ? `<div class="photo"><img src="${sp[0]}" alt=""/></div>` : `<div class="photo empty"></div>`;
     return `<div class="b-base tpl-train-5" style="font-family:'${st.fontBody}',sans-serif;">${logo}${photoHTML}<div class="info" style="text-align:${st.align};"><div ${lblStyle} style="color:var(--gray);font-family:'Oswald',sans-serif;letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px;" data-editable contenteditable="true">${escapeHtml((d.course||'').toUpperCase())}</div><div class="topic" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.topic||'')}</div><div ${sStyle} style="margin-top:24px;color:var(--gray);"><div data-editable contenteditable="true">${escapeHtml((d.instructors||[]).filter(Boolean).join(' · '))}</div><div data-editable contenteditable="true" style="margin-top:6px;">${escapeHtml(d.date||'')}</div></div></div></div>`;
+  }
+  if (tplId === 'train-6') {
+    const speakers = [0,1,2].map(i => {
+      const src = d.speakers && d.speakers[i] ? d.speakers[i] : null;
+      const ph = src ? `<div class="photo-circle"><img src="${src}" alt=""/></div>` : `<div class="photo-circle empty"></div>`;
+      const name = (d.instructors && d.instructors[i]) ? escapeHtml(d.instructors[i]) : '';
+      return `<div class="speaker">${ph}${name ? `<div class="name" data-editable contenteditable="true" style="font-size:${subSize*0.85}px;">${name}</div>` : ''}</div>`;
+    }).join('');
+    return `<div class="b-base tpl-train-6" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}<div class="top"><div class="course" data-editable contenteditable="true" style="font-size:${lblSize}px;font-family:'Oswald',sans-serif;letter-spacing:.3em;text-transform:uppercase;">${escapeHtml((d.course||'').toUpperCase())}</div><div class="topic" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.topic||'')}</div><div class="accent-line"></div><div class="date" data-editable contenteditable="true" style="font-size:${subSize*0.85}px;">${escapeHtml(d.date||'')}</div></div><div class="speakers-row">${speakers}</div></div>`;
   }
 
   if (tplId === 'honor-1') {
