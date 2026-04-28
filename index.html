@@ -13,7 +13,7 @@
   :root { --primary:#6C2BD9; --accent:#00D9FF; --dark:#0F0E17; --light:#FFFFFF; --soft:#F5F3FF; --gray:#4A4A4A; --border:#E5E5E5; --stage-bg:#F0F0F0; }
   * { box-sizing: border-box; }
   html, body { margin:0; padding:0; background:var(--light); color:var(--dark); font-family:'Inter',system-ui,sans-serif; }
-  header, footer { background:var(--dark); color:var(--accent); text-align:center; font-family:'Oswald',sans-serif; letter-spacing:.5px; position:sticky; z-index:5; }
+  header, footer { background:linear-gradient(90deg,var(--dark) 0%,var(--primary) 100%); color:var(--accent); text-align:center; font-family:'Oswald',sans-serif; letter-spacing:.5px; position:sticky; z-index:5; }
   header { padding:14px 24px; font-size:18px; font-weight:600; top:0; display:flex; align-items:center; justify-content:center; gap:14px; }
   header .brand-logo { height:30px; width:auto; }
   footer { padding:12px 24px; font-size:13px; font-weight:500; bottom:0; }
@@ -321,11 +321,14 @@
       <div class="acc-body">
         <div class="field">
           <label>Logo công ty (click để upload)</label>
-          <label class="logo-uploader" id="logo-uploader">
-            <input type="file" id="logo-input" accept="image/*" style="display:none;" />
-            <span class="ph" id="logo-ph">Click để upload logo<br/>→ tự lấy 3 màu chủ đạo</span>
-            <img id="logo-preview" style="display:none;" alt="" />
-          </label>
+          <div style="position:relative;">
+            <label class="logo-uploader" id="logo-uploader">
+              <input type="file" id="logo-input" accept="image/*" style="display:none;" />
+              <span class="ph" id="logo-ph">Click để upload logo<br/>→ tự lấy 3 màu chủ đạo</span>
+              <img id="logo-preview" style="display:none;" alt="" />
+            </label>
+            <button type="button" id="btn-logo-clear" title="Xóa logo" style="display:none;position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:none;cursor:pointer;font-size:14px;line-height:1;padding:0;z-index:2;">×</button>
+          </div>
         </div>
         <div class="field">
           <label>Màu trích xuất (click để đổi thủ công)</label>
@@ -546,20 +549,39 @@ function sanitize(s) { return (s||'').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/
 function rgbToHex(r,g,b) { return '#' + [r,g,b].map(x=>Math.max(0,Math.min(255,Math.round(x))).toString(16).padStart(2,'0')).join('').toUpperCase(); }
 
 function extractColorsFromImage(img) {
-  const c = document.createElement('canvas'); const w=80, h=80; c.width=w; c.height=h;
+  const c = document.createElement('canvas'); const w=100, h=100; c.width=w; c.height=h;
   const ctx = c.getContext('2d'); ctx.drawImage(img,0,0,w,h);
   let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e) { return null; }
+
+  // First pass: count ALL non-transparent pixels and check saturation distribution
+  let totalPixels = 0, saturatedPixels = 0;
+  for (let i=0; i<data.length; i+=4) {
+    const a = data[i+3]; if (a<128) continue;
+    totalPixels++;
+    const r=data[i], g=data[i+1], b=data[i+2];
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    // Saturation check: if (max-min)/max > 0.2 we consider it "colored"
+    if (max > 0 && (max-min)/max > 0.2) saturatedPixels++;
+  }
+
+  // If <5% pixels are saturated, this is essentially a B&W / monochrome logo
+  if (totalPixels === 0 || saturatedPixels / totalPixels < 0.05) {
+    return { monochrome: true };
+  }
+
+  // Second pass: extract colors (only saturated ones)
   const counts = new Map();
   for (let i=0; i<data.length; i+=4) {
     const a = data[i+3]; if (a<128) continue;
     const r = Math.round(data[i]/24)*24, g = Math.round(data[i+1]/24)*24, b = Math.round(data[i+2]/24)*24;
     const max = Math.max(r,g,b), min = Math.min(r,g,b);
-    if (max>240 && min>240) continue;
-    if (max<20) continue;
-    if (max-min<12 && max<220) continue;
+    if (max>240 && min>240) continue;       // white
+    if (max<20) continue;                    // black
+    if (max-min<20 && max<220) continue;     // grey-ish (more strict)
+    if (max > 0 && (max-min)/max < 0.15) continue; // low saturation
     const key = `${r},${g},${b}`; counts.set(key, (counts.get(key)||0)+1);
   }
-  if (!counts.size) return null;
+  if (!counts.size) return { monochrome: true };
   const sorted = [...counts.entries()].sort((a,b)=>b[1]-a[1]);
   const colors = sorted.slice(0,12).map(([k])=>k.split(',').map(Number));
   const primary = colors[0];
@@ -1037,9 +1059,9 @@ function syncUI() {
   document.querySelectorAll('[data-logopos]').forEach(b => b.classList.toggle('on', b.getAttribute('data-logopos') === state.brand.logoPos));
   $('show-logo-corner').checked = state.brand.showLogo;
   const lp = $('logo-preview');
-  if (state.brand.logo) { lp.src = state.brand.logo; lp.style.display='block'; $('logo-ph').style.display='none'; }
-  else { lp.style.display='none'; $('logo-ph').style.display='block'; }
-  // sync bg image
+  const lc = $('btn-logo-clear');
+  if (state.brand.logo) { lp.src = state.brand.logo; lp.style.display='block'; $('logo-ph').style.display='none'; if (lc) lc.style.display='block'; }
+  else { lp.style.display='none'; $('logo-ph').style.display='block'; if (lc) lc.style.display='none'; }
   applyBrand(); renderContentForm(); renderTemplateList();
 }
 
@@ -1064,12 +1086,17 @@ function init() {
       const img = new Image(); img.crossOrigin = 'anonymous';
       img.onload = () => {
         const colors = extractColorsFromImage(img);
-        if (colors) {
+        if (colors && !colors.monochrome) {
           state.brand.primary = colors.primary; state.brand.accent = colors.accent; state.brand.dark = colors.dark;
-          showToast(`Đã trích màu: ${colors.primary} / ${colors.accent} / ${colors.dark}`);
-        } else { showToast('Logo upload — không trích được màu, dùng mặc định.'); }
+          showToast(`✓ Đã trích màu: ${colors.primary} / ${colors.accent} / ${colors.dark}`);
+        } else if (colors && colors.monochrome) {
+          showToast('🎨 Logo trắng-đen (monochrome) — giữ màu brand mặc định, bạn có thể đổi thủ công.');
+        } else {
+          showToast('Logo upload — không trích được màu.');
+        }
         $('logo-preview').src = ev.target.result; $('logo-preview').style.display = 'block';
         $('logo-ph').style.display = 'none';
+        const lc = $('btn-logo-clear'); if (lc) lc.style.display = 'block';
         applyBrand(); render(); pushHistory();
       };
       img.onerror = () => showToast('Logo lỗi.');
@@ -1078,6 +1105,20 @@ function init() {
     reader.readAsDataURL(file);
   });
   $('show-logo-corner').addEventListener('change', e => { state.brand.showLogo = e.target.checked; render(); pushHistory(); });
+  $('btn-logo-clear').addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    state.brand.logo = null;
+    // Reset màu về default
+    state.brand.primary = DEFAULT_STATE.brand.primary;
+    state.brand.accent  = DEFAULT_STATE.brand.accent;
+    state.brand.dark    = DEFAULT_STATE.brand.dark;
+    $('logo-preview').style.display = 'none';
+    $('logo-ph').style.display = 'block';
+    $('btn-logo-clear').style.display = 'none';
+    $('logo-input').value = '';
+    applyBrand(); render(); pushHistory();
+    showToast('Đã xóa logo và reset màu brand về mặc định.');
+  });
   $('btn-clear-theme').addEventListener('click', () => {
     state.theme = null;
     const pe = $('f-preset'); if (pe) pe.value = '';
