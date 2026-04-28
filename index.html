@@ -762,8 +762,24 @@ function bindContentForm() {
   function applyBgAndSwitch(src) {
     state.bgImage.src = src;
     if (!state.template.event.startsWith('event-bg-')) state.template.event = 'event-bg-1';
-    renderTemplateList(); renderContentForm(); render(); pushHistory();
-    showToast('✓ Đã set ảnh nền — chọn 1 trong 4 mẫu 🖼️ bên dưới');
+    // Auto-extract colors from ref image and apply as theme
+    const probe = new Image();
+    probe.crossOrigin = 'anonymous';
+    probe.onload = () => {
+      const colors = extractColorsFromImage(probe);
+      if (colors) {
+        state.theme = { primary: colors.primary, accent: colors.accent, dark: colors.dark, label: '🎨 Từ ảnh tham khảo' };
+        showToast(`✓ Ảnh nền + 3 màu trích: ${colors.primary} / ${colors.accent} / ${colors.dark}`);
+      } else {
+        showToast('✓ Đã set ảnh nền (không trích được màu — có thể CORS chặn).');
+      }
+      renderTemplateList(); renderContentForm(); render(); pushHistory();
+    };
+    probe.onerror = () => {
+      showToast('✓ Đã set ảnh nền (không trích được màu — link bị chặn CORS, thử upload ảnh).');
+      renderTemplateList(); renderContentForm(); render(); pushHistory();
+    };
+    probe.src = src;
   }
   const fBgLoad = $('f-btn-bg-load');
   if (fBgLoad) {
