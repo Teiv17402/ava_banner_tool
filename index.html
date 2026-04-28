@@ -210,13 +210,13 @@
   .tpl-evt-base::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 75% 35%,rgba(255,255,255,.18) 0%,transparent 45%),radial-gradient(circle at 20% 80%,rgba(0,0,0,.3) 0%,transparent 50%); }
   .tpl-evt-base::after { content:""; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(110deg,transparent 0,transparent 100px,rgba(255,255,255,.04) 100px,rgba(255,255,255,.04) 102px); }
   .tpl-evt-base .evt-content { position:relative; z-index:2; width:100%; height:100%; display:flex; }
-  .tpl-evt-base .cta-script { font-family:'Great Vibes','Allura',cursive; color:var(--accent); font-weight:400; line-height:1; text-shadow:0 3px 12px rgba(0,0,0,.5); }
+  .tpl-evt-base .cta-script { font-family:'Great Vibes','Allura',cursive; color:var(--decor); font-weight:400; line-height:1; text-shadow:0 3px 12px rgba(0,0,0,.5); }
   .tpl-evt-base .title-main { font-family:'Montserrat','Inter',sans-serif; font-weight:800; text-transform:uppercase; color:#fff; letter-spacing:.01em; line-height:1.1; text-shadow:0 4px 14px rgba(0,0,0,.4); }
   .tpl-evt-base .subtitle-thin { font-family:'Oswald',sans-serif; font-weight:300; text-transform:uppercase; letter-spacing:.18em; color:rgba(255,255,255,.95); }
-  .tpl-evt-base .date-pill { display:inline-block; padding:14px 32px; background:linear-gradient(135deg,rgba(0,0,0,.2) 0%,var(--accent) 30%,var(--accent) 70%,rgba(0,0,0,.2) 100%); color:#fff; font-weight:700; border-radius:10px; box-shadow:0 4px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -2px 0 rgba(0,0,0,.2); font-family:'Oswald',sans-serif; letter-spacing:.05em; border:1px solid rgba(255,255,255,.2); }
+  .tpl-evt-base .date-pill { display:inline-block; padding:14px 32px; background:linear-gradient(135deg,rgba(0,0,0,.2) 0%,var(--decor) 30%,var(--decor) 70%,rgba(0,0,0,.2) 100%); color:#fff; font-weight:700; border-radius:10px; box-shadow:0 4px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -2px 0 rgba(0,0,0,.2); font-family:'Oswald',sans-serif; letter-spacing:.05em; border:1px solid rgba(255,255,255,.2); }
   .tpl-evt-base .body-italic { font-style:italic; color:rgba(255,255,255,.92); font-family:'Inter','Lora',sans-serif; }
-  .tpl-evt-base .star-icon { line-height:1; filter:drop-shadow(0 0 30px var(--accent)) drop-shadow(0 6px 14px rgba(0,0,0,.4)); }
-  .tpl-evt-base .watermark { position:absolute; bottom:20px; left:24px; color:var(--accent); font-family:'Oswald',sans-serif; letter-spacing:.2em; text-transform:uppercase; opacity:.85; z-index:3; }
+  .tpl-evt-base .star-icon { line-height:1; filter:drop-shadow(0 0 30px var(--decor)) drop-shadow(0 6px 14px rgba(0,0,0,.4)); }
+  .tpl-evt-base .watermark { position:absolute; bottom:20px; left:24px; color:var(--decor); font-family:'Oswald',sans-serif; letter-spacing:.2em; text-transform:uppercase; opacity:.85; z-index:3; }
 
   /* event-1: Hero star (giống master) */
   .tpl-event-1 .evt-content { display:grid; grid-template-columns:1fr 1.6fr; align-items:center; gap:30px; padding:50px; }
@@ -226,12 +226,12 @@
 
   /* event-2: Stack vertical, full width title */
   .tpl-event-2 .evt-content { flex-direction:column; align-items:center; justify-content:center; padding:50px; text-align:center; gap:14px; }
-  .tpl-event-2 .top-icon { font-size:3em; line-height:1; filter:drop-shadow(0 0 20px var(--accent)); margin-bottom:6px; }
+  .tpl-event-2 .top-icon { font-size:3em; line-height:1; filter:drop-shadow(0 0 20px var(--decor)); margin-bottom:6px; }
 
   /* event-3: Frame center, ngôi sao 4 góc */
   .tpl-event-3 .evt-content { padding:60px; align-items:center; justify-content:center; }
-  .tpl-event-3 .frame { border:3px solid var(--accent); padding:50px 60px; max-width:90%; text-align:center; position:relative; background:rgba(0,0,0,.2); backdrop-filter:blur(6px); display:flex; flex-direction:column; gap:14px; align-items:center; box-shadow:0 0 40px rgba(0,0,0,.3); }
-  .tpl-event-3 .frame .corner-star { position:absolute; font-size:1.8em; color:var(--accent); filter:drop-shadow(0 0 8px var(--accent)); line-height:1; }
+  .tpl-event-3 .frame { border:3px solid var(--decor); padding:50px 60px; max-width:90%; text-align:center; position:relative; background:rgba(0,0,0,.2); backdrop-filter:blur(6px); display:flex; flex-direction:column; gap:14px; align-items:center; box-shadow:0 0 40px rgba(0,0,0,.3); }
+  .tpl-event-3 .frame .corner-star { position:absolute; font-size:1.8em; color:var(--decor); filter:drop-shadow(0 0 8px var(--decor)); line-height:1; }
   .tpl-event-3 .frame .corner-star.tl { top:-18px; left:-18px; }
   .tpl-event-3 .frame .corner-star.tr { top:-18px; right:-18px; }
   .tpl-event-3 .frame .corner-star.bl { bottom:-18px; left:-18px; }
@@ -613,12 +613,25 @@ function activeColors() {
   };
 }
 
+// Compute "decoration color" — high contrast vs primary bg.
+// Nếu accent quá giống primary (cùng hue), fallback sang gold để decoration nổi bật.
+function computeDecorColor(primary, accent) {
+  const p = hexToRgb(primary), a = hexToRgb(accent);
+  // Manhattan distance in RGB
+  const dist = Math.abs(p.r-a.r) + Math.abs(p.g-a.g) + Math.abs(p.b-a.b);
+  if (dist >= 250) return accent; // Đủ khác biệt → giữ accent
+  // Nếu primary tối → fallback gold sáng. Nếu primary sáng → fallback đen sang trọng.
+  const lum = (p.r*0.299 + p.g*0.587 + p.b*0.114) / 255;
+  return lum < 0.55 ? '#FFD700' : '#1A1A1A';
+}
+
 function applyBrand() {
   const r = document.documentElement.style; const c = activeColors();
   r.setProperty('--primary', c.primary);
   r.setProperty('--accent', c.accent);
   r.setProperty('--dark', c.dark);
   r.setProperty('--light', c.light);
+  r.setProperty('--decor', computeDecorColor(c.primary, c.accent));
   const hLogo = $('brand-logo-header');
   if (state.brand.logo) { hLogo.src = state.brand.logo; hLogo.style.display='block'; } else { hLogo.style.display='none'; }
   $('sw-primary').style.background = state.brand.primary;
@@ -1190,4 +1203,4 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
