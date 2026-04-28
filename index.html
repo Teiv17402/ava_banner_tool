@@ -13,12 +13,12 @@
   :root { --primary:#6C2BD9; --accent:#00D9FF; --dark:#0F0E17; --light:#FFFFFF; --soft:#F5F3FF; --gray:#4A4A4A; --border:#E5E5E5; --stage-bg:#F0F0F0; }
   * { box-sizing: border-box; }
   html, body { margin:0; padding:0; background:var(--light); color:var(--dark); font-family:'Inter',system-ui,sans-serif; }
-  header, footer { background:linear-gradient(90deg,var(--dark) 0%,var(--primary) 100%); color:var(--accent); text-align:center; font-family:'Oswald',sans-serif; letter-spacing:.5px; position:sticky; z-index:5; }
+  header, footer { background:#000000; color:#FFFFFF; text-align:center; font-family:'Oswald',sans-serif; letter-spacing:.5px; position:sticky; z-index:5; }
   header { padding:14px 24px; font-size:18px; font-weight:600; top:0; display:flex; align-items:center; justify-content:center; gap:14px; }
   header .brand-logo { height:30px; width:auto; }
   footer { padding:12px 24px; font-size:13px; font-weight:500; bottom:0; }
   header .sep, footer .sep { opacity:.5; margin:0 10px; }
-  header .grad { background:linear-gradient(90deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:700; }
+  header .grad { color:#FFFFFF; font-weight:700; }
   main { display:grid; grid-template-columns:440px 1fr; gap:16px; padding:16px; align-items:stretch; }
   .tabs { display:flex; flex-wrap:wrap; gap:4px; padding:10px; background:var(--dark); border-radius:10px 10px 0 0; }
   .tab { padding:8px 12px; font-size:12px; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.6px; font-weight:600; background:transparent; color:rgba(255,255,255,.55); border:1px solid transparent; border-radius:6px; cursor:pointer; transition:all .15s; }
@@ -1090,7 +1090,11 @@ function init() {
           state.brand.primary = colors.primary; state.brand.accent = colors.accent; state.brand.dark = colors.dark;
           showToast(`✓ Đã trích màu: ${colors.primary} / ${colors.accent} / ${colors.dark}`);
         } else if (colors && colors.monochrome) {
-          showToast('🎨 Logo trắng-đen (monochrome) — giữ màu brand mặc định, bạn có thể đổi thủ công.');
+          // Logo trắng-đen → set theme B&W
+          state.brand.primary = '#1A1A1A';
+          state.brand.accent  = '#888888';
+          state.brand.dark    = '#000000';
+          showToast('🎨 Logo trắng-đen → set theme B&W (đen + xám). Đổi thủ công nếu cần.');
         } else {
           showToast('Logo upload — không trích được màu.');
         }
