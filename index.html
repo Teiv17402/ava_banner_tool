@@ -233,6 +233,39 @@
   .tpl-event-4 .info .title { color:var(--dark); font-weight:800; line-height:1.05; margin-bottom:18px; }
   .tpl-event-4 .info .meta { color:var(--gray); }
 
+  /* EVENT BG (background image overlay) */
+  .tpl-bg-base { color:#fff; background-size:cover; background-position:center; position:relative; }
+  .tpl-bg-base::before { content:""; position:absolute; inset:0; background:rgba(0,0,0,var(--bg-dim,0.4)); }
+  .tpl-bg-base .bg-content { position:relative; z-index:2; width:100%; height:100%; display:flex; flex-direction:column; }
+  .tpl-bg-base .bg-empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#555,#222); color:rgba(255,255,255,.5); font-size:24px; font-family:'Oswald',sans-serif; letter-spacing:.3em; text-align:center; padding:40px; z-index:1; }
+
+  .tpl-event-bg-1 .bg-content { padding:50px; align-items:center; justify-content:center; text-align:center; }
+  .tpl-event-bg-1 .label { color:var(--accent); letter-spacing:.4em; text-transform:uppercase; font-size:.5em; margin-bottom:18px; text-shadow:0 2px 8px rgba(0,0,0,.6); }
+  .tpl-event-bg-1 .title { font-weight:800; line-height:1.05; margin-bottom:24px; text-shadow:0 4px 16px rgba(0,0,0,.7); }
+  .tpl-event-bg-1 .meta { padding:14px 24px; background:rgba(0,0,0,.5); border:2px solid var(--accent); border-radius:8px; color:var(--accent); font-family:'Oswald',sans-serif; letter-spacing:.1em; display:inline-block; backdrop-filter:blur(6px); }
+
+  .tpl-event-bg-2::before { background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.2) 50%,rgba(0,0,0,.85) 100%); }
+  .tpl-event-bg-2 .bg-content { padding:50px; justify-content:flex-end; text-align:left; }
+  .tpl-event-bg-2 .label { color:var(--accent); letter-spacing:.4em; text-transform:uppercase; font-size:.5em; margin-bottom:14px; }
+  .tpl-event-bg-2 .title { font-weight:800; line-height:1.05; margin-bottom:18px; text-shadow:0 4px 12px rgba(0,0,0,.5); }
+  .tpl-event-bg-2 .meta { color:#fff; font-family:'Oswald',sans-serif; letter-spacing:.05em; opacity:.95; }
+
+  .tpl-event-bg-3 .bg-content { padding:50px; align-items:center; justify-content:center; }
+  .tpl-event-bg-3 .frosted { background:rgba(255,255,255,.92); color:var(--dark); padding:50px 60px; border-radius:14px; max-width:80%; text-align:center; backdrop-filter:blur(20px); box-shadow:0 20px 60px rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.3); }
+  .tpl-event-bg-3 .label { color:var(--primary); letter-spacing:.4em; text-transform:uppercase; font-size:.5em; margin-bottom:14px; font-family:'Oswald',sans-serif; font-weight:700; }
+  .tpl-event-bg-3 .title { color:var(--dark); font-weight:800; line-height:1.05; margin-bottom:18px; }
+  .tpl-event-bg-3 .meta { color:var(--gray); }
+
+  .tpl-event-bg-4 { display:grid; grid-template-columns:1fr 1fr; padding:0; }
+  .tpl-event-bg-4::before { content:none; }
+  .tpl-event-bg-4 .bg-side { background-size:cover; background-position:center; position:relative; }
+  .tpl-event-bg-4 .bg-side::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,0)); }
+  .tpl-event-bg-4 .info { padding:50px; background:#fff; color:var(--dark); display:flex; flex-direction:column; justify-content:center; }
+  .tpl-event-bg-4 .label { color:var(--primary); letter-spacing:.4em; text-transform:uppercase; font-size:.5em; margin-bottom:14px; font-family:'Oswald',sans-serif; font-weight:700; }
+  .tpl-event-bg-4 .title { color:var(--dark); font-weight:800; line-height:1.05; margin-bottom:18px; }
+  .tpl-event-bg-4 .meta { color:var(--gray); }
+  .tpl-event-bg-4 .bg-side.empty { background:linear-gradient(135deg,#555,#222); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.5); font-size:18px; font-family:'Oswald',sans-serif; letter-spacing:.3em; text-align:center; }
+
   /* SUMMARY */
   .tpl-sum-1 { background:linear-gradient(135deg,var(--primary),var(--dark)); color:#fff; padding:50px; justify-content:space-between; }
   .tpl-sum-1 .head { text-align:center; }
@@ -309,6 +342,33 @@
           <span class="label" style="font-size:11px;font-weight:700;color:var(--primary);flex:1;">—</span>
           <button class="btn-mini" id="btn-clear-theme" type="button">Dùng màu brand</button>
         </div>
+      </div>
+    </div>
+    <div class="acc closed" data-acc="bgimage">
+      <button class="acc-hd">🖼️ Ảnh nền (cho mẫu Sự kiện)</button>
+      <div class="acc-body">
+        <div class="field">
+          <label>Paste link ảnh từ Google Images</label>
+          <div style="display:flex;gap:6px;">
+            <input type="text" id="bg-url-input" placeholder="https://..." style="flex:1;" />
+            <button class="btn-mini" id="btn-bg-load" type="button">Load</button>
+          </div>
+          <div style="font-size:10px;color:var(--gray);margin-top:6px;line-height:1.4;">Trên Google Images: chuột phải lên ảnh → <strong>Copy image address</strong> → paste vào đây → bấm Load. Sau đó vào tab <strong>Sự kiện</strong> chọn 1 trong 4 mẫu có icon 🖼️.</div>
+        </div>
+        <div class="field">
+          <label>Hoặc upload ảnh từ máy</label>
+          <label class="logo-uploader" id="bg-uploader" style="height:100px;">
+            <input type="file" id="bg-upload" accept="image/*" style="display:none;" />
+            <span class="ph" id="bg-ph">Click để upload ảnh nền</span>
+            <img id="bg-preview" style="display:none;" alt="" />
+          </label>
+        </div>
+        <div class="field">
+          <label>Độ tối overlay (giúp text dễ đọc)</label>
+          <div class="range-row"><input type="range" id="bg-dim" min="0" max="80" value="40"><span class="range-val" id="bg-dim-val">40%</span></div>
+        </div>
+        <div class="field"><button class="btn-mini" id="btn-bg-clear" type="button" style="width:100%;">Xóa ảnh nền</button></div>
+        <div class="warn" id="bg-warn" style="display:none;"></div>
       </div>
     </div>
     <div class="acc" data-acc="content">
@@ -424,7 +484,11 @@ const MODULES = {
     {id:'event-1',name:'Bold center',swatchCss:'background:linear-gradient(180deg,var(--primary),var(--dark));'},
     {id:'event-2',name:'Card top',swatchCss:'background:#fff;box-shadow:inset 0 30px 0 var(--primary);'},
     {id:'event-3',name:'Glow dark',swatchCss:'background:var(--dark);'},
-    {id:'event-4',name:'Date side',swatchCss:'background:linear-gradient(90deg,var(--accent) 35%,#fff 35%);'}
+    {id:'event-4',name:'Date side',swatchCss:'background:linear-gradient(90deg,var(--accent) 35%,#fff 35%);'},
+    {id:'event-bg-1',name:'🖼️ Ảnh nền + center',swatchCss:'background:linear-gradient(45deg,#888,#333);position:relative;'},
+    {id:'event-bg-2',name:'🖼️ Ảnh nền + bottom',swatchCss:'background:linear-gradient(180deg,#888 50%,#000);'},
+    {id:'event-bg-3',name:'🖼️ Frosted card',swatchCss:'background:linear-gradient(45deg,#aaa,#555);box-shadow:inset 0 0 0 8px rgba(255,255,255,.4);'},
+    {id:'event-bg-4',name:'🖼️ Split ảnh trái',swatchCss:'background:linear-gradient(90deg,#666 50%,#fff 50%);'}
   ]},
   summary: { name:'Tổng kết', templates:[
     {id:'sum-1',name:'KPI grid dark',swatchCss:'background:linear-gradient(135deg,var(--primary),var(--dark));'},
@@ -482,6 +546,7 @@ const today = (() => { const d=new Date(); return `${String(d.getDate()).padStar
 const DEFAULT_STATE = {
   brand: { primary:'#6C2BD9', accent:'#00D9FF', dark:'#0F0E17', light:'#FFFFFF', logo:null, showLogo:true, logoPos:'tr' },
   theme: null,
+  bgImage: { src: null, dim: 0.4 },
   module: 'train',
   size: 'slide',
   template: { train:'train-1', honor:'honor-1', bday:'bday-1', welcome:'wel-1', event:'event-1', summary:'sum-1' },
@@ -781,6 +846,17 @@ function buildHTML(tplId, st, sz) {
     return `<div class="b-base tpl-event-4" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="date-side"><div class="day" style="font-size:${titleSize*1.4}px;">${day}</div><div class="month" ${lblStyle}>${month}</div></div><div class="info"><div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><div data-editable contenteditable="true">${escapeHtml(d.time||'')}</div><div data-editable contenteditable="true" style="margin-top:4px;">${escapeHtml(d.venue||'')}</div></div></div></div>`;
   }
 
+  // BACKGROUND IMAGE TEMPLATES
+  const bg = (st.bgImage && st.bgImage.src) || '';
+  const dim = (st.bgImage && typeof st.bgImage.dim === 'number') ? st.bgImage.dim : 0.4;
+  const bgStyle = bg ? `background-image:url('${bg}');--bg-dim:${dim};` : '--bg-dim:0;';
+  const bgEmpty = bg ? '' : '<div class="bg-empty">🖼️ Chưa có ảnh nền · Vào panel "Ảnh nền" paste link / upload ảnh</div>';
+
+  if (tplId === 'event-bg-1') return `<div class="b-base tpl-bg-base tpl-event-bg-1" style="font-family:'${st.fontBody}',sans-serif;${bgStyle}">${bgEmpty}<div class="bg-content">${logo}<div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><span data-editable contenteditable="true">${escapeHtml(d.time||'')}</span><span style="margin:0 12px;opacity:.6;">·</span><span data-editable contenteditable="true">${escapeHtml(d.venue||'')}</span></div></div></div>`;
+  if (tplId === 'event-bg-2') return `<div class="b-base tpl-bg-base tpl-event-bg-2" style="font-family:'${st.fontBody}',sans-serif;${bgStyle}">${bgEmpty}<div class="bg-content">${logo}<div style="margin-top:auto;"><div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><span data-editable contenteditable="true">${escapeHtml(d.time||'')}</span><span style="margin:0 12px;opacity:.6;">·</span><span data-editable contenteditable="true">${escapeHtml(d.venue||'')}</span></div></div></div></div>`;
+  if (tplId === 'event-bg-3') return `<div class="b-base tpl-bg-base tpl-event-bg-3" style="font-family:'${st.fontBody}',sans-serif;${bgStyle}">${bgEmpty}<div class="bg-content">${logo}<div class="frosted"><div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><span data-editable contenteditable="true">${escapeHtml(d.time||'')}</span><span style="margin:0 12px;opacity:.6;">·</span><span data-editable contenteditable="true">${escapeHtml(d.venue||'')}</span></div></div></div></div>`;
+  if (tplId === 'event-bg-4') return `<div class="b-base tpl-event-bg-4" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="bg-side ${bg?'':'empty'}" style="${bg?`background-image:url('${bg}');`:''}">${bg?'':'🖼️ Chưa có ảnh nền'}</div><div class="info"><div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d.eventType||'').toUpperCase())}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="meta" ${sStyle}><div data-editable contenteditable="true">${escapeHtml(d.time||'')}</div><div data-editable contenteditable="true" style="margin-top:4px;">${escapeHtml(d.venue||'')}</div></div></div></div>`;
+
   if (tplId === 'sum-1') return `<div class="b-base tpl-sum-1" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}<div class="head"><div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml(d.period||'')}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div></div><div class="kpis">${[1,2,3].map(i=>`<div class="kpi"><div class="num" data-editable contenteditable="true" style="font-size:${titleSize*0.6}px;">${escapeHtml(d['kpi'+i+'Num']||'')}</div><div class="lbl" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d['kpi'+i+'Lbl']||'').toUpperCase())}</div></div>`).join('')}</div></div>`;
   if (tplId === 'sum-2') return `<div class="b-base tpl-sum-2" style="font-family:'${st.fontBody}',sans-serif;">${logo}<div class="header"><div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml(d.period||'')}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div></div><div class="kpis">${[1,2,3].map(i=>`<div class="kpi"><div class="num" data-editable contenteditable="true" style="font-size:${titleSize*0.7}px;">${escapeHtml(d['kpi'+i+'Num']||'')}</div><div class="lbl" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d['kpi'+i+'Lbl']||'').toUpperCase())}</div></div>`).join('')}</div></div>`;
   if (tplId === 'sum-3') return `<div class="b-base tpl-sum-3" style="font-family:'${st.fontBody}',sans-serif;padding:${padScale}px;">${logo}<div class="label" data-editable contenteditable="true" ${lblStyle}>${escapeHtml(d.period||'')}</div><div class="title" data-editable contenteditable="true" ${tStyle}>${escapeHtml(d.title||'')}</div><div class="kpis">${[1,2,3].map(i=>`<div class="kpi"><div class="num" data-editable contenteditable="true" style="font-size:${titleSize*0.55}px;">${escapeHtml(d['kpi'+i+'Num']||'')}</div><div class="lbl" data-editable contenteditable="true" ${lblStyle}>${escapeHtml((d['kpi'+i+'Lbl']||'').toUpperCase())}</div></div>`).join('')}</div></div>`;
@@ -881,6 +957,12 @@ function syncUI() {
   const lp = $('logo-preview');
   if (state.brand.logo) { lp.src = state.brand.logo; lp.style.display='block'; $('logo-ph').style.display='none'; }
   else { lp.style.display='none'; $('logo-ph').style.display='block'; }
+  // sync bg image
+  const bgI = state.bgImage || { src:null, dim:0.4 };
+  if (bgI.src) { $('bg-preview').src = bgI.src; $('bg-preview').style.display='block'; $('bg-ph').style.display='none'; }
+  else { $('bg-preview').style.display='none'; $('bg-ph').style.display='block'; }
+  $('bg-dim').value = Math.round((bgI.dim||0.4)*100);
+  $('bg-dim-val').textContent = $('bg-dim').value + '%';
   applyBrand(); renderContentForm(); renderTemplateList();
 }
 
@@ -923,6 +1005,55 @@ function init() {
     state.theme = null;
     const pe = $('f-preset'); if (pe) pe.value = '';
     render(); pushHistory(); showToast('Đã trở về màu brand.');
+  });
+
+  // ===== BACKGROUND IMAGE =====
+  function setBgImage(src, suggestEvent=true) {
+    state.bgImage.src = src;
+    $('bg-preview').src = src;
+    $('bg-preview').style.display = 'block';
+    $('bg-ph').style.display = 'none';
+    $('bg-warn').style.display = 'none';
+    // Tự chuyển sang tab Sự kiện + chọn template event-bg-1 nếu chưa
+    if (suggestEvent) {
+      state.module = 'event';
+      state.template.event = 'event-bg-1';
+      syncUI();
+    }
+    render(); pushHistory();
+    showToast('✓ Đã load ảnh nền — đang ở mẫu 🖼️ event-bg-1');
+  }
+  $('btn-bg-load').addEventListener('click', () => {
+    const url = $('bg-url-input').value.trim();
+    if (!url) { showToast('Paste link ảnh trước nhé.'); return; }
+    if (!/^https?:\/\//i.test(url)) { showToast('Link phải bắt đầu bằng http(s)://'); return; }
+    // Test load
+    const img = new Image();
+    img.onload = () => setBgImage(url);
+    img.onerror = () => {
+      $('bg-warn').textContent = 'Không load được ảnh. Có thể bị chặn CORS hoặc link sai. Thử upload ảnh từ máy.';
+      $('bg-warn').style.display = 'block';
+      showToast('Lỗi load ảnh.');
+    };
+    img.src = url;
+  });
+  $('bg-upload').addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => setBgImage(ev.target.result);
+    reader.readAsDataURL(file);
+  });
+  $('bg-dim').addEventListener('input', () => {
+    state.bgImage.dim = (+$('bg-dim').value) / 100;
+    $('bg-dim-val').textContent = $('bg-dim').value + '%';
+    render();
+  });
+  $('btn-bg-clear').addEventListener('click', () => {
+    state.bgImage.src = null; state.bgImage.dim = 0.4;
+    $('bg-preview').style.display = 'none'; $('bg-ph').style.display = 'block';
+    $('bg-url-input').value = ''; $('bg-dim').value = 40; $('bg-dim-val').textContent = '40%';
+    $('bg-warn').style.display = 'none';
+    render(); pushHistory(); showToast('Đã xóa ảnh nền.');
   });
   document.querySelectorAll('[data-logopos]').forEach(b => {
     b.addEventListener('click', () => {
