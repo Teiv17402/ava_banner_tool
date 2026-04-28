@@ -688,7 +688,26 @@ function renderContentForm() {
         groups[g].forEach(p => { optsHtml += `<option value="${p.value}">${escapeHtml(p.label)}</option>`; });
         optsHtml += '</optgroup>';
       });
-      html += `<div class="field"><label>Chọn sự kiện có sẵn (40+ mẫu) → tự fill + đổi theme màu</label><select id="f-preset" style="margin-bottom:6px;">${optsHtml}</select><button type="button" class="btn-mini" id="btn-google-search" style="width:100%;margin-top:4px;">🔍 Tìm mẫu trên Google Images</button><div style="font-size:10px;color:var(--gray);margin-top:6px;line-height:1.4;">Chọn preset → đổi màu theo dịp lễ. Bấm <strong>Tìm mẫu</strong> để xem mẫu thật ngoài Google, paste link ảnh vào chat để Claude build template tương tự.</div></div>`;
+      const curBg = (state.bgImage && state.bgImage.src) ? state.bgImage.src : '';
+      html += `<div class="field"><label>Chọn sự kiện có sẵn (40+ mẫu) → tự fill + đổi theme màu</label><select id="f-preset" style="margin-bottom:6px;">${optsHtml}</select><button type="button" class="btn-mini" id="btn-google-search" style="width:100%;margin-top:4px;">🔍 Tìm mẫu trên Google Images</button></div>
+        <div class="field" style="padding:10px;background:var(--soft);border-radius:6px;border:1px dashed var(--primary);">
+          <label style="color:var(--primary);">🖼️ DÙNG ẢNH GOOGLE LÀM NỀN BANNER</label>
+          <div style="font-size:10px;color:var(--gray);margin-bottom:8px;line-height:1.4;">Trên Google Images: chuột phải lên ảnh → <strong>Copy image address</strong> → paste vào đây.</div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input type="text" id="f-bg-url" placeholder="https://..." value="${escapeHtml(curBg.startsWith('data:')?'':curBg)}" style="flex:1;" />
+            <button type="button" class="btn-mini" id="f-btn-bg-load">Load</button>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <label class="btn-mini" style="cursor:pointer;flex:1;text-align:center;">
+              <input type="file" id="f-bg-upload" accept="image/*" style="display:none;" />
+              📁 Upload từ máy
+            </label>
+            <button type="button" class="btn-mini" id="f-btn-bg-clear" style="flex:1;">Xóa ảnh</button>
+          </div>
+          ${curBg ? `<div style="margin-top:8px;display:flex;align-items:center;gap:8px;"><img src="${curBg}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;border:1px solid var(--border);"/><span style="font-size:10px;color:var(--gray);">✓ Đã có ảnh nền — chọn mẫu 🖼️ bên dưới</span></div>` : ''}
+          <div style="margin-top:8px;"><label style="font-size:10px;">Độ tối overlay (giúp text dễ đọc)</label><div class="range-row"><input type="range" id="f-bg-dim" min="0" max="80" value="${Math.round(((state.bgImage&&state.bgImage.dim)||0.4)*100)}"><span class="range-val" id="f-bg-dim-val">${Math.round(((state.bgImage&&state.bgImage.dim)||0.4)*100)}%</span></div></div>
+          <div class="warn" id="f-bg-warn" style="display:none;"></div>
+        </div>`;
       html += fld('Loại sự kiện','f-eventType',d.eventType,'text','WORKSHOP / MEETING');
       html += fld('Tên sự kiện','f-title',d.title);
       html += fld('Thời gian','f-time',d.time,'text','14:00 · 28/04/2026');
@@ -737,6 +756,53 @@ function bindContentForm() {
       else { const t = (d.title || d.eventType || 'banner sự kiện').trim(); q = `${t} banner design`; }
       window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q), '_blank', 'noopener');
       showToast('Mở Google Images: ' + q);
+    });
+  }
+  // BG image inline controls (in Sự kiện form)
+  function applyBgAndSwitch(src) {
+    state.bgImage.src = src;
+    if (!state.template.event.startsWith('event-bg-')) state.template.event = 'event-bg-1';
+    renderTemplateList(); renderContentForm(); render(); pushHistory();
+    showToast('✓ Đã set ảnh nền — chọn 1 trong 4 mẫu 🖼️ bên dưới');
+  }
+  const fBgLoad = $('f-btn-bg-load');
+  if (fBgLoad) {
+    fBgLoad.addEventListener('click', () => {
+      const url = $('f-bg-url').value.trim();
+      if (!url) { showToast('Paste link ảnh trước nhé.'); return; }
+      if (!/^https?:\/\//i.test(url)) { showToast('Link phải bắt đầu http(s)://'); return; }
+      const img = new Image();
+      img.onload = () => applyBgAndSwitch(url);
+      img.onerror = () => {
+        const w = $('f-bg-warn'); if (w) { w.textContent = 'Không load được ảnh. Có thể bị chặn CORS — thử upload ảnh từ máy.'; w.style.display='block'; w.classList.add('show'); }
+        showToast('Lỗi load ảnh.');
+      };
+      img.src = url;
+    });
+  }
+  const fBgUp = $('f-bg-upload');
+  if (fBgUp) {
+    fBgUp.addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => applyBgAndSwitch(ev.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+  const fBgDim = $('f-bg-dim');
+  if (fBgDim) {
+    fBgDim.addEventListener('input', () => {
+      state.bgImage.dim = (+fBgDim.value)/100;
+      $('f-bg-dim-val').textContent = fBgDim.value + '%';
+      render();
+    });
+  }
+  const fBgClear = $('f-btn-bg-clear');
+  if (fBgClear) {
+    fBgClear.addEventListener('click', () => {
+      state.bgImage.src = null;
+      renderContentForm(); render(); pushHistory();
+      showToast('Đã xóa ảnh nền.');
     });
   }
   // photo slots
