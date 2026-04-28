@@ -1215,4 +1215,39 @@ function init() {
   $('font-title').addEventListener('change', () => { state.fontTitle = $('font-title').value; render(); pushHistory(); });
   $('font-body').addEventListener('change', () => { state.fontBody = $('font-body').value; render(); pushHistory(); });
   $('title-size').addEventListener('input', () => { state.titleSize = +$('title-size').value; $('title-size-val').textContent = state.titleSize+'px'; render(); pushHistory(); });
-  $('sub-size').addEventListener('input', () => { state.sub
+  $('sub-size').addEventListener('input', () => { state.subSize = +$('sub-size').value; $('sub-size-val').textContent = state.subSize+'px'; render(); pushHistory(); });
+  $('letter').addEventListener('input', () => { state.letter = +$('letter').value; $('letter-val').textContent = state.letter+'px'; render(); pushHistory(); });
+  $('line').addEventListener('input', () => { state.line = +$('line').value; $('line-val').textContent = parseFloat(state.line).toFixed(2); render(); pushHistory(); });
+  document.querySelectorAll('[data-align]').forEach(b => {
+    b.addEventListener('click', () => {
+      state.align = b.getAttribute('data-align');
+      document.querySelectorAll('[data-align]').forEach(x => x.classList.toggle('on', x === b));
+      render(); pushHistory();
+    });
+  });
+  $('pad').addEventListener('input', () => { state.pad = +$('pad').value; $('pad-val').textContent = state.pad+'px'; render(); pushHistory(); });
+  $('btn-autofit').addEventListener('click', autoFit);
+  $('btn-save-preset').addEventListener('click', savePreset);
+  $('btn-load-preset').addEventListener('click', loadPreset);
+  $('btn-reset').addEventListener('click', resetState);
+  $('jpg-q').addEventListener('input', () => { state.jpgQ = +$('jpg-q').value; $('jpg-q-val').textContent = state.jpgQ+'%'; });
+  $('btn-render').addEventListener('click', () => { render(); showToast('Đã làm mới preview.'); });
+  $('btn-png').addEventListener('click', () => wrapLoad(downloadPNG));
+  $('btn-jpg').addEventListener('click', () => wrapLoad(downloadJPG));
+  $('btn-copy').addEventListener('click', () => wrapLoad(copyImage));
+  $('btn-zip').addEventListener('click', () => wrapLoad(downloadZIP));
+  document.addEventListener('keydown', e => {
+    const inField = ['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName) || e.target.isContentEditable;
+    if (e.key === ' ' && !inField) { e.preventDefault(); render(); }
+    if ((e.ctrlKey||e.metaKey) && e.key === 's') { e.preventDefault(); wrapLoad(downloadPNG); }
+    if ((e.ctrlKey||e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+    if ((e.ctrlKey||e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
+  });
+  window.addEventListener('resize', () => render());
+  syncUI(); render(); pushHistory();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
