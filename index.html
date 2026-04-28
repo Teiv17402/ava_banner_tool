@@ -344,33 +344,6 @@
         </div>
       </div>
     </div>
-    <div class="acc closed" data-acc="bgimage">
-      <button class="acc-hd">🖼️ Ảnh nền (cho mẫu Sự kiện)</button>
-      <div class="acc-body">
-        <div class="field">
-          <label>Paste link ảnh từ Google Images</label>
-          <div style="display:flex;gap:6px;">
-            <input type="text" id="bg-url-input" placeholder="https://..." style="flex:1;" />
-            <button class="btn-mini" id="btn-bg-load" type="button">Load</button>
-          </div>
-          <div style="font-size:10px;color:var(--gray);margin-top:6px;line-height:1.4;">Trên Google Images: chuột phải lên ảnh → <strong>Copy image address</strong> → paste vào đây → bấm Load. Sau đó vào tab <strong>Sự kiện</strong> chọn 1 trong 4 mẫu có icon 🖼️.</div>
-        </div>
-        <div class="field">
-          <label>Hoặc upload ảnh từ máy</label>
-          <label class="logo-uploader" id="bg-uploader" style="height:100px;">
-            <input type="file" id="bg-upload" accept="image/*" style="display:none;" />
-            <span class="ph" id="bg-ph">Click để upload ảnh nền</span>
-            <img id="bg-preview" style="display:none;" alt="" />
-          </label>
-        </div>
-        <div class="field">
-          <label>Độ tối overlay (giúp text dễ đọc)</label>
-          <div class="range-row"><input type="range" id="bg-dim" min="0" max="80" value="40"><span class="range-val" id="bg-dim-val">40%</span></div>
-        </div>
-        <div class="field"><button class="btn-mini" id="btn-bg-clear" type="button" style="width:100%;">Xóa ảnh nền</button></div>
-        <div class="warn" id="bg-warn" style="display:none;"></div>
-      </div>
-    </div>
     <div class="acc" data-acc="content">
       <button class="acc-hd">Nội dung</button>
       <div class="acc-body" id="content-body"></div>
@@ -546,7 +519,7 @@ const today = (() => { const d=new Date(); return `${String(d.getDate()).padStar
 const DEFAULT_STATE = {
   brand: { primary:'#6C2BD9', accent:'#00D9FF', dark:'#0F0E17', light:'#FFFFFF', logo:null, showLogo:true, logoPos:'tr' },
   theme: null,
-  bgImage: { src: null, dim: 0.4 },
+  bgImage: { src: null, dim: 0.4, useAsBg: false },
   module: 'train',
   size: 'slide',
   template: { train:'train-1', honor:'honor-1', bday:'bday-1', welcome:'wel-1', event:'event-1', summary:'sum-1' },
@@ -689,10 +662,11 @@ function renderContentForm() {
         optsHtml += '</optgroup>';
       });
       const curBg = (state.bgImage && state.bgImage.src) ? state.bgImage.src : '';
+      const useBg = !!(state.bgImage && state.bgImage.useAsBg);
       html += `<div class="field"><label>Chọn sự kiện có sẵn (40+ mẫu) → tự fill + đổi theme màu</label><select id="f-preset" style="margin-bottom:6px;">${optsHtml}</select><button type="button" class="btn-mini" id="btn-google-search" style="width:100%;margin-top:4px;">🔍 Tìm mẫu trên Google Images</button></div>
         <div class="field" style="padding:10px;background:var(--soft);border-radius:6px;border:1px dashed var(--primary);">
-          <label style="color:var(--primary);">🖼️ DÙNG ẢNH GOOGLE LÀM NỀN BANNER</label>
-          <div style="font-size:10px;color:var(--gray);margin-bottom:8px;line-height:1.4;">Trên Google Images: chuột phải lên ảnh → <strong>Copy image address</strong> → paste vào đây.</div>
+          <label style="color:var(--primary);">🎨 LẤY MÀU TỪ ẢNH THAM KHẢO</label>
+          <div style="font-size:10px;color:var(--gray);margin-bottom:8px;line-height:1.4;">Paste link ảnh đẹp từ Google → tool tự trích 3 màu chủ đạo, áp lên template sạch (không chồng text).</div>
           <div style="display:flex;gap:6px;margin-bottom:6px;">
             <input type="text" id="f-bg-url" placeholder="https://..." value="${escapeHtml(curBg.startsWith('data:')?'':curBg)}" style="flex:1;" />
             <button type="button" class="btn-mini" id="f-btn-bg-load">Load</button>
@@ -704,8 +678,17 @@ function renderContentForm() {
             </label>
             <button type="button" class="btn-mini" id="f-btn-bg-clear" style="flex:1;">Xóa ảnh</button>
           </div>
-          ${curBg ? `<div style="margin-top:8px;display:flex;align-items:center;gap:8px;"><img src="${curBg}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;border:1px solid var(--border);"/><span style="font-size:10px;color:var(--gray);">✓ Đã có ảnh nền — chọn mẫu 🖼️ bên dưới</span></div>` : ''}
-          <div style="margin-top:8px;"><label style="font-size:10px;">Độ tối overlay (giúp text dễ đọc)</label><div class="range-row"><input type="range" id="f-bg-dim" min="0" max="80" value="${Math.round(((state.bgImage&&state.bgImage.dim)||0.4)*100)}"><span class="range-val" id="f-bg-dim-val">${Math.round(((state.bgImage&&state.bgImage.dim)||0.4)*100)}%</span></div></div>
+          ${curBg ? `<div style="margin-top:8px;display:flex;align-items:center;gap:8px;"><img src="${curBg}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;border:1px solid var(--border);"/><span style="font-size:10px;color:var(--gray);">✓ Đã trích màu từ ảnh này</span></div>` : ''}
+          <div style="margin-top:10px;padding:8px;background:#fff;border-radius:5px;border:1px solid var(--border);">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:11px;color:var(--dark);text-transform:none;letter-spacing:0;font-weight:600;">
+              <input type="checkbox" id="f-bg-use" ${useBg?'checked':''} style="width:auto;" />
+              🖼️ Dùng ảnh này làm <strong>nền banner</strong> (chỉ bật khi ảnh KHÔNG có text — pattern, texture, ảnh phong cảnh...)
+            </label>
+            <div id="f-bg-dim-row" style="margin-top:8px;${useBg?'':'display:none;'}">
+              <label style="font-size:10px;">Độ tối overlay (giúp text dễ đọc)</label>
+              <div class="range-row"><input type="range" id="f-bg-dim" min="0" max="80" value="${Math.round(((state.bgImage&&state.bgImage.dim)||0.4)*100)}"><span class="range-val" id="f-bg-dim-val">${Math.round(((state.bgImage&&state.bgImage.dim)||0.4)*100)}%</span></div>
+            </div>
+          </div>
           <div class="warn" id="f-bg-warn" style="display:none;"></div>
         </div>`;
       html += fld('Loại sự kiện','f-eventType',d.eventType,'text','WORKSHOP / MEETING');
@@ -761,22 +744,21 @@ function bindContentForm() {
   // BG image inline controls (in Sự kiện form)
   function applyBgAndSwitch(src) {
     state.bgImage.src = src;
-    if (!state.template.event.startsWith('event-bg-')) state.template.event = 'event-bg-1';
-    // Auto-extract colors from ref image and apply as theme
+    // KHÔNG tự switch template — chỉ trích màu áp lên template hiện tại
     const probe = new Image();
     probe.crossOrigin = 'anonymous';
     probe.onload = () => {
       const colors = extractColorsFromImage(probe);
       if (colors) {
-        state.theme = { primary: colors.primary, accent: colors.accent, dark: colors.dark, label: '🎨 Từ ảnh tham khảo' };
-        showToast(`✓ Ảnh nền + 3 màu trích: ${colors.primary} / ${colors.accent} / ${colors.dark}`);
+        state.theme = { primary: colors.primary, accent: colors.accent, dark: colors.dark, label: '🎨 Màu từ ảnh ref' };
+        showToast(`🎨 Đã trích 3 màu: ${colors.primary} / ${colors.accent} / ${colors.dark}`);
       } else {
-        showToast('✓ Đã set ảnh nền (không trích được màu — có thể CORS chặn).');
+        showToast('Không trích được màu (CORS chặn). Thử upload từ máy.');
       }
       renderTemplateList(); renderContentForm(); render(); pushHistory();
     };
     probe.onerror = () => {
-      showToast('✓ Đã set ảnh nền (không trích được màu — link bị chặn CORS, thử upload ảnh).');
+      showToast('Không load được ảnh — thử upload từ máy.');
       renderTemplateList(); renderContentForm(); render(); pushHistory();
     };
     probe.src = src;
@@ -817,8 +799,26 @@ function bindContentForm() {
   if (fBgClear) {
     fBgClear.addEventListener('click', () => {
       state.bgImage.src = null;
+      state.bgImage.useAsBg = false;
       renderContentForm(); render(); pushHistory();
-      showToast('Đã xóa ảnh nền.');
+      showToast('Đã xóa ảnh ref.');
+    });
+  }
+  // Toggle: dùng làm nền hay không
+  const fBgUse = $('f-bg-use');
+  if (fBgUse) {
+    fBgUse.addEventListener('change', () => {
+      state.bgImage.useAsBg = fBgUse.checked;
+      const dimRow = $('f-bg-dim-row'); if (dimRow) dimRow.style.display = fBgUse.checked ? 'block' : 'none';
+      // Tự chuyển template phù hợp
+      if (fBgUse.checked) {
+        if (!state.template.event.startsWith('event-bg-')) state.template.event = 'event-bg-1';
+        showToast('🖼️ Bật chế độ ảnh nền — chuyển sang mẫu bg-1');
+      } else {
+        if (state.template.event.startsWith('event-bg-')) state.template.event = 'event-1';
+        showToast('🎨 Tắt ảnh nền — chỉ dùng màu, mẫu sạch');
+      }
+      renderTemplateList(); render(); pushHistory();
     });
   }
   // photo slots
@@ -929,7 +929,7 @@ function buildHTML(tplId, st, sz) {
   }
 
   // BACKGROUND IMAGE TEMPLATES
-  const bg = (st.bgImage && st.bgImage.src) || '';
+  const bg = (st.bgImage && st.bgImage.src && st.bgImage.useAsBg) ? st.bgImage.src : '';
   const dim = (st.bgImage && typeof st.bgImage.dim === 'number') ? st.bgImage.dim : 0.4;
   const bgStyle = bg ? `background-image:url('${bg}');--bg-dim:${dim};` : '--bg-dim:0;';
   const bgEmpty = bg ? '' : '<div class="bg-empty">🖼️ Chưa có ảnh nền · Vào panel "Ảnh nền" paste link / upload ảnh</div>';
@@ -1040,11 +1040,6 @@ function syncUI() {
   if (state.brand.logo) { lp.src = state.brand.logo; lp.style.display='block'; $('logo-ph').style.display='none'; }
   else { lp.style.display='none'; $('logo-ph').style.display='block'; }
   // sync bg image
-  const bgI = state.bgImage || { src:null, dim:0.4 };
-  if (bgI.src) { $('bg-preview').src = bgI.src; $('bg-preview').style.display='block'; $('bg-ph').style.display='none'; }
-  else { $('bg-preview').style.display='none'; $('bg-ph').style.display='block'; }
-  $('bg-dim').value = Math.round((bgI.dim||0.4)*100);
-  $('bg-dim-val').textContent = $('bg-dim').value + '%';
   applyBrand(); renderContentForm(); renderTemplateList();
 }
 
@@ -1087,57 +1082,7 @@ function init() {
     state.theme = null;
     const pe = $('f-preset'); if (pe) pe.value = '';
     render(); pushHistory(); showToast('Đã trở về màu brand.');
-  });
-
-  // ===== BACKGROUND IMAGE =====
-  function setBgImage(src, suggestEvent=true) {
-    state.bgImage.src = src;
-    $('bg-preview').src = src;
-    $('bg-preview').style.display = 'block';
-    $('bg-ph').style.display = 'none';
-    $('bg-warn').style.display = 'none';
-    // Tự chuyển sang tab Sự kiện + chọn template event-bg-1 nếu chưa
-    if (suggestEvent) {
-      state.module = 'event';
-      state.template.event = 'event-bg-1';
-      syncUI();
-    }
-    render(); pushHistory();
-    showToast('✓ Đã load ảnh nền — đang ở mẫu 🖼️ event-bg-1');
-  }
-  $('btn-bg-load').addEventListener('click', () => {
-    const url = $('bg-url-input').value.trim();
-    if (!url) { showToast('Paste link ảnh trước nhé.'); return; }
-    if (!/^https?:\/\//i.test(url)) { showToast('Link phải bắt đầu bằng http(s)://'); return; }
-    // Test load
-    const img = new Image();
-    img.onload = () => setBgImage(url);
-    img.onerror = () => {
-      $('bg-warn').textContent = 'Không load được ảnh. Có thể bị chặn CORS hoặc link sai. Thử upload ảnh từ máy.';
-      $('bg-warn').style.display = 'block';
-      showToast('Lỗi load ảnh.');
-    };
-    img.src = url;
-  });
-  $('bg-upload').addEventListener('change', e => {
-    const file = e.target.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => setBgImage(ev.target.result);
-    reader.readAsDataURL(file);
-  });
-  $('bg-dim').addEventListener('input', () => {
-    state.bgImage.dim = (+$('bg-dim').value) / 100;
-    $('bg-dim-val').textContent = $('bg-dim').value + '%';
-    render();
-  });
-  $('btn-bg-clear').addEventListener('click', () => {
-    state.bgImage.src = null; state.bgImage.dim = 0.4;
-    $('bg-preview').style.display = 'none'; $('bg-ph').style.display = 'block';
-    $('bg-url-input').value = ''; $('bg-dim').value = 40; $('bg-dim-val').textContent = '40%';
-    $('bg-warn').style.display = 'none';
-    render(); pushHistory(); showToast('Đã xóa ảnh nền.');
-  });
-  document.querySelectorAll('[data-logopos]').forEach(b => {
+  });  document.querySelectorAll('[data-logopos]').forEach(b => {
     b.addEventListener('click', () => {
       state.brand.logoPos = b.getAttribute('data-logopos');
       document.querySelectorAll('[data-logopos]').forEach(x => x.classList.toggle('on', x === b));
