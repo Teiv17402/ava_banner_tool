@@ -566,6 +566,20 @@ function redo() { if (hIdx>=history.length-1) return; hIdx++; state = JSON.parse
 function showToast(msg) { toast.textContent=msg; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t = setTimeout(()=>toast.classList.remove('show'),1800); }
 function escapeHtml(s) { return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function sanitize(s) { return (s||'').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'_'); }
+// Date picker helpers: input type="date" dùng ISO YYYY-MM-DD, banner hiện DD/MM/YYYY
+function fmtDateForDisplay(iso) {
+  if (!iso) return '';
+  const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : String(iso);
+}
+function fmtDateForInput(displayOrIso) {
+  if (!displayOrIso) return '';
+  const s = String(displayOrIso);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  return '';
+}
 function rgbToHex(r,g,b) { return '#' + [r,g,b].map(x=>Math.max(0,Math.min(255,Math.round(x))).toString(16).padStart(2,'0')).join('').toUpperCase(); }
 function hexToRgb(hex) { const m = String(hex||'').replace('#','').match(/.{1,2}/g); return m && m.length>=3 ? { r:parseInt(m[0],16)||0, g:parseInt(m[1],16)||0, b:parseInt(m[2],16)||0 } : {r:0,g:0,b:0}; }
 
@@ -685,7 +699,7 @@ function renderContentForm() {
       html += fld('Tên khóa học','f-course',d.course);
       html += fld('Chủ đề buổi học','f-topic',d.topic);
       html += `<div class="field"><label>Tên giảng viên (tối đa 3)</label><input type="text" id="f-ins0" value="${escapeHtml(d.instructors[0]||'')}" placeholder="Giảng viên 1" style="margin-bottom:6px;" /><input type="text" id="f-ins1" value="${escapeHtml(d.instructors[1]||'')}" placeholder="Giảng viên 2" style="margin-bottom:6px;" /><input type="text" id="f-ins2" value="${escapeHtml(d.instructors[2]||'')}" placeholder="Giảng viên 3" /></div>`;
-      html += fld('Ngày tháng','f-date',d.date);
+      html += `<div class="field"><label for="f-date">Ngày tháng</label><input type="date" id="f-date" value="${fmtDateForInput(d.date)}" /></div>`;
       html += photoCircles('speakers',d.speakers);
       break;
     case 'honor':
@@ -697,7 +711,7 @@ function renderContentForm() {
       break;
     case 'bday':
       html += fld('Họ tên','f-name',d.name);
-      html += fld('Ngày sinh','f-dob',d.dob,'text','DD/MM/YYYY');
+      html += `<div class="field"><label for="f-dob">Ngày sinh</label><input type="date" id="f-dob" value="${fmtDateForInput(d.dob)}" /></div>`;
       html += fld('Lời chúc','f-wishes',d.wishes,'textarea');
       html += photoSlot('photo',d.photo,'Ảnh chân dung');
       break;
@@ -705,7 +719,7 @@ function renderContentForm() {
       html += fld('Họ tên','f-name',d.name);
       html += fld('Chức danh / Vị trí','f-role',d.role);
       html += fld('Phòng ban','f-dept',d.dept);
-      html += fld('Ngày join','f-joinDate',d.joinDate);
+      html += `<div class="field"><label for="f-joinDate">Ngày join</label><input type="date" id="f-joinDate" value="${fmtDateForInput(d.joinDate)}" /></div>`;
       html += photoSlot('photo',d.photo,'Ảnh chân dung');
       break;
     case 'event':
@@ -774,7 +788,15 @@ function bindContentForm() {
     });
   });
   ['course','topic','date','name','role','achievement','badge','dob','wishes','dept','joinDate','title','eventType','time','venue','desc','period','kpi1Num','kpi1Lbl','kpi2Num','kpi2Lbl','kpi3Num','kpi3Lbl','cta'].forEach(k => {
-    const el = $('f-'+k); if (el) el.addEventListener('input', () => { d[k] = el.value; render(); pushHistory(); });
+    const el = $('f-'+k); if (el) el.addEventListener('input', () => {
+      // Date fields: input type="date" → ISO → convert to DD/MM/YYYY
+      if (['date','dob','joinDate'].includes(k)) {
+        d[k] = fmtDateForDisplay(el.value);
+      } else {
+        d[k] = el.value;
+      }
+      render(); pushHistory();
+    });
   });
   [0,1,2].forEach(i => {
     const el = $('f-ins'+i); if (el) el.addEventListener('input', () => { d.instructors[i] = el.value; render(); pushHistory(); });
