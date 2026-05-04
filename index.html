@@ -1313,4 +1313,14 @@ function init() {
     const inField = ['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName) || e.target.isContentEditable;
     if (e.key === ' ' && !inField) { e.preventDefault(); render(); }
     if ((e.ctrlKey||e.metaKey) && e.key === 's') { e.preventDefault(); wrapLoad(downloadPNG); }
-    if ((e.ctrlKey||e.metaKey) && e.key === 'z' && !e.shiftKey) { e.prev
+    if ((e.ctrlKey||e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+    if ((e.ctrlKey||e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
+  });
+  window.addEventListener('resize', () => render());
+  syncUI(); render(); pushHistory();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
