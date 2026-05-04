@@ -1079,13 +1079,21 @@ function buildHTML(tplId, st, sz) {
 function render() {
   applyBrand();
   const sz = SIZES[state.size]; const tplId = state.template[state.module];
-  banner.style.width = sz.w + 'px'; banner.style.height = sz.h + 'px';
   banner.innerHTML = buildHTML(tplId, state, sz);
   const stageBox = stage.getBoundingClientRect();
-  const availW = stageBox.width - 60; const availH = stageBox.height - 60;
+  const availW = Math.max(50, stageBox.width - 60);
+  const availH = Math.max(50, stageBox.height - 60);
   const scale = Math.min(availW/sz.w, availH/sz.h, 1);
-  bannerWrap.style.transform = `scale(${scale})`;
-  bannerWrap.style.width = sz.w + 'px'; bannerWrap.style.height = sz.h + 'px';
+  // Banner ở size thật, scale từ top-left
+  banner.style.width = sz.w + 'px';
+  banner.style.height = sz.h + 'px';
+  banner.style.transform = `scale(${scale})`;
+  banner.style.transformOrigin = 'top left';
+  // Wrapper có dimension THỰC sau scale → flex parent center đúng + không overflow
+  bannerWrap.style.width = (sz.w * scale) + 'px';
+  bannerWrap.style.height = (sz.h * scale) + 'px';
+  bannerWrap.style.position = 'relative';
+  bannerWrap.style.overflow = 'hidden';
   $('meta-size').textContent = `${SIZES[state.size].label} — ${sz.w} × ${sz.h} px`;
   const tpl = MODULES[state.module].templates.find(t => t.id === tplId);
   $('tpl-label').textContent = `${MODULES[state.module].name} — ${tpl?tpl.name:''}`;
@@ -1305,14 +1313,4 @@ function init() {
     const inField = ['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName) || e.target.isContentEditable;
     if (e.key === ' ' && !inField) { e.preventDefault(); render(); }
     if ((e.ctrlKey||e.metaKey) && e.key === 's') { e.preventDefault(); wrapLoad(downloadPNG); }
-    if ((e.ctrlKey||e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
-    if ((e.ctrlKey||e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
-  });
-  window.addEventListener('resize', () => render());
-  syncUI(); render(); pushHistory();
-}
-
-document.addEventListener('DOMContentLoaded', init);
-</script>
-</body>
-</html>
+    if ((e.ctrlKey||e.metaKey) && e.key === 'z' && !e.shiftKey) { e.prev
